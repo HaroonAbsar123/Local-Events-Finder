@@ -64,12 +64,23 @@ export default function EmailAndPassword({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={pallette.primaryHeading}>Sign In</Text>
+      <Text style={pallette.primaryHeading}>Create Account</Text>
       <Text style={pallette.secondaryHeading}>
-        Hi! Welcome back, you've been missed
+        Fill your information below
       </Text>
 
       <View style={styles.formContainer}>
+        
+      {/* NAME INPUT */}
+      <View style={styles.formFieldContainer}>
+          <Text style={pallette.formHeading}>Name</Text>
+          <TextInput
+            style={pallette.formInput}
+            placeholder="John Doe"
+            placeholderTextColor={colorScheme === "dark" ? "#9e9e9e" : "#4e4e4e"}
+          />
+        </View>
+
       {/* EMAIL INPUT */}
         <View style={styles.formFieldContainer}>
           <Text style={pallette.formHeading}>Email</Text>
@@ -77,8 +88,8 @@ export default function EmailAndPassword({navigation}) {
             style={pallette.formInput}
             placeholder="example@gmail.com"
             value={email}
-            onChangeText={(text) => setEmail(text)}
             placeholderTextColor={colorScheme === "dark" ? "#9e9e9e" : "#4e4e4e"}
+            onChangeText={(text) => setEmail(text)}
           />
         </View>
 
@@ -87,19 +98,24 @@ export default function EmailAndPassword({navigation}) {
           <Text style={pallette.formHeading}>Password</Text>
           <PasswordInput password={password} setPassword={setPassword} />
         </View>
+      
+        {/* PASSWORD INPUT */}
+        <View style={styles.formFieldContainer}>
+          <Text style={pallette.formHeading}>Confirm Password</Text>
+          <PasswordInput password={password} setPassword={setPassword} />
+        </View>
       </View>
 
-      <Text style={styles.forgotPassword}>Forgot Password?</Text>
 
         <View style={styles.buttonContainer}>
-            <PrimaryButton title={"Sign In"} onPress={() => console.log("Pressed!")} />
+            <PrimaryButton title={"Sign Up"} onPress={() => console.log("Pressed!")} />
         </View>
 
     <Pressable 
-    onPress={() => navigation.navigate('Register')} 
+    onPress={() => navigation.navigate('Login')} 
     style={styles.navTextContainer}>
-        <Text style={styles.otherText}>Don't have an account?</Text>
-        <Text style={styles.navText}>Register</Text>
+        <Text style={styles.otherText}>Already have an account?</Text>
+        <Text style={styles.navText}>Sign In</Text>
         </Pressable>
 
     </View>

@@ -1,10 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import { 
-  useColorScheme
- } from "react-native";
+import { StyleSheet,  View, ScrollView } from "react-native";
+import { useColorScheme } from "react-native";
+import EmailAndPassword from "./EmailAndPassword";
 
-export default function Register() {
-
+export default function Register({navigation}) {
   let colorScheme = useColorScheme();
 
   const styles = StyleSheet.create({
@@ -14,6 +12,11 @@ export default function Register() {
       alignItems: "center",
       justifyContent: "center",
     },
+    scrollView: {
+      flex: 1,
+      width: "100%",
+      height: '100%',
+    },
     text: {
       color: colorScheme === "dark" ? "#fff" : "#1e1e1e",
     },
@@ -21,9 +24,9 @@ export default function Register() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>
-        Open up Register.js to start working on your app!
-      </Text>
+      <ScrollView style={styles.scrollView}>
+        <EmailAndPassword navigation={navigation}/>
+      </ScrollView>
     </View>
   );
 }

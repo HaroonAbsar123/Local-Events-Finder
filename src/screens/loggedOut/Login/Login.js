@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useColorScheme } from "react-native";
 import EmailAndPassword from "./EmailAndPassword";
 
-export default function Login() {
+export default function Login({navigation}) {
   let colorScheme = useColorScheme();
 
   const styles = StyleSheet.create({
@@ -25,7 +25,7 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <EmailAndPassword />
+        <EmailAndPassword navigation={navigation}/>
       </ScrollView>
     </View>
   );

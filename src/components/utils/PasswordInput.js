@@ -32,13 +32,14 @@ export default function PasswordInput({ password, setPassword }) {
         value={password}
         style={styles.textInput}
         placeholder="******"
+        placeholderTextColor={colorScheme === "dark" ? "#9e9e9e" : "#4e4e4e"}
         secureTextEntry={securePassword}
         onChangeText={(text) => setPassword(text)}
       />
       <Entypo
         name={securePassword ? "eye" : "eye-with-line"}
         size={24}
-        color="black"
+        color={colorScheme === "dark" ? "#fff" : "#4e4e4e"}
         onPress={() => setSecurePassword((prev) => !prev)}
       />
     </View>
