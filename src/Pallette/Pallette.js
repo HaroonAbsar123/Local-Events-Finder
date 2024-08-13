@@ -1,10 +1,16 @@
 import { StyleSheet } from "react-native";
 import { useColorScheme } from "react-native";
 
-function Pallette() {
+function usePallette() {
   let colorScheme = useColorScheme();
 
   const styles = StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colorScheme === "dark" ? "#2e2e2e" : "#F8EDED",
+      alignItems: "center",
+      justifyContent: "center",
+    },
     primaryHeading: {
       color: colorScheme === "dark" ? "#fff" : "#4e4e4e",
       fontSize: 30,
@@ -35,4 +41,4 @@ function Pallette() {
   return styles;
 }
 
-export default Pallette;
+export default usePallette;

@@ -12,7 +12,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <SafeAreaView style={{ flex: 1}}>
-        <StatusBar style={colorScheme} />
+        <StatusBar style={
+          "dark"
+          // colorScheme
+          } />
         <Main
         />
       </SafeAreaView>

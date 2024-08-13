@@ -7,7 +7,7 @@ export default function PrimaryButton({ title, onPress }) {
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: colorScheme === "dark" ? "#ff8043" : "#ff8043",
+      backgroundColor: "#ff8043",
       borderRadius: 30,
       overflow: "hidden",
     },

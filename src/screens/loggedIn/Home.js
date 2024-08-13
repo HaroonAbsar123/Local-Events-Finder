@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
-import { 
-  useColorScheme
- } from "react-native";
+import { useColorScheme } from "react-native";
+import usePallette from "../../Pallette/Pallette";
 
 export default function Home() {
-
-  let colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
+  const pallette = usePallette();
 
   const styles = StyleSheet.create({
     container: {
@@ -20,7 +19,7 @@ export default function Home() {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={pallette.screen}>
       <Text style={styles.text}>
         Open up Home.js to start working on your app!
       </Text>

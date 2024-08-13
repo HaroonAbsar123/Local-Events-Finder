@@ -1,17 +1,13 @@
 import { StyleSheet,  View, ScrollView } from "react-native";
 import { useColorScheme } from "react-native";
 import EmailAndPassword from "./EmailAndPassword";
+import usePallette from "../../../Pallette/Pallette";
 
 export default function Register({navigation}) {
-  let colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
+  const pallette = usePallette();
 
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colorScheme === "dark" ? "#1e1e1e" : "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-    },
     scrollView: {
       flex: 1,
       width: "100%",
@@ -23,7 +19,7 @@ export default function Register({navigation}) {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={pallette.screen}>
       <ScrollView style={styles.scrollView}>
         <EmailAndPassword navigation={navigation}/>
       </ScrollView>

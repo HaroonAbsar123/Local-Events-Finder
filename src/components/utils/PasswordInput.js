@@ -32,7 +32,7 @@ export default function PasswordInput({ password, setPassword }) {
         value={password}
         style={styles.textInput}
         placeholder="******"
-        placeholderTextColor={colorScheme === "dark" ? "#9e9e9e" : "#4e4e4e"}
+        placeholderTextColor={"#9e9e9e"}
         secureTextEntry={securePassword}
         onChangeText={(text) => setPassword(text)}
       />

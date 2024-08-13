@@ -13,9 +13,9 @@ export const Main = () => {
         headerShown: false,
       }}
     >
+    <MainStack.Screen name="BottomTabs" component={BottomTabs} />
     <MainStack.Screen name="Login" component={Login} />
     <MainStack.Screen name="Register" component={Register} />
-    <MainStack.Screen name="BottomTabs" component={BottomTabs} />
     </MainStack.Navigator>
   );
 };
