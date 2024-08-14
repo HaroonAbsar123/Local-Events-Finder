@@ -1,15 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
-import { 
-  useColorScheme
- } from "react-native";
+import { useColorScheme } from "react-native";
 import usePallette from "../../Pallette/Pallette";
 
-export default function About() {
-
+export default function Events() {
   const colorScheme = useColorScheme();
   const pallette = usePallette();
 
   const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colorScheme === "dark" ? "#1e1e1e" : "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+    },
     text: {
       color: colorScheme === "dark" ? "#fff" : "#1e1e1e",
     },
@@ -18,7 +21,7 @@ export default function About() {
   return (
     <View style={pallette.screen}>
       <Text style={styles.text}>
-        Open up About.js to start working on your app!
+        Open up Events.js to start working on your app!
       </Text>
     </View>
   );

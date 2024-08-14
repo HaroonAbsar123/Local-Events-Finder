@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,13 +12,71 @@ import PasswordInput from "../../../components/utils/PasswordInput";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
 import Logo from "../../../assets/logo.png";
 import usePallette from "../../../Pallette/Pallette";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db, auth } from "../../../firebase";
+import { AppContext } from "../../../context/AppContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function EmailAndPassword({ navigation }) {
+  const { setUserDetails } = useContext(AppContext);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const colorScheme = useColorScheme();
   const pallette = usePallette();
+
+  async function signUpHandler() {
+    try {
+      setLoading(true);
+      setError(null);
+      if (!name || !email || !password || !confirmPassword) {
+        if (!name) {
+          setError("Please enter name");
+        } else if (!email) {
+          setError("Please enter email");
+        } else if (!password) {
+          setError("Please enter password");
+        } else if (!confirmPassword) {
+          setError("Please confirm password");
+        }
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const userDocRef = doc(db, "userList", userCredential.user.uid);
+      await setDoc(userDocRef, {
+        name: name,
+        email: email,
+        userId: userCredential.user.uid,
+      });
+      setUserDetails({
+        name,
+        email,
+        userId: userCredential.user.uid,
+      });
+      AsyncStorage.setItem("userId", userCredential.user.uid)
+      navigation.replace("BottomTabs");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -76,6 +134,11 @@ export default function EmailAndPassword({ navigation }) {
       color: colorScheme === "dark" ? "#fff" : "#5e5e5e",
       fontSize: 15,
     },
+    error: {
+      color: "red",
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
   });
 
   return (
@@ -98,6 +161,9 @@ export default function EmailAndPassword({ navigation }) {
             style={pallette.formInput}
             placeholder="John Doe"
             placeholderTextColor={"#9e9e9e"}
+            id="name"
+            value={name}
+            onChangeText={(text) => setName(text)}
           />
         </View>
 
@@ -110,6 +176,8 @@ export default function EmailAndPassword({ navigation }) {
             value={email}
             placeholderTextColor={"#9e9e9e"}
             onChangeText={(text) => setEmail(text)}
+            id="email"
+            keyboardType="email-address"
           />
         </View>
 
@@ -122,14 +190,19 @@ export default function EmailAndPassword({ navigation }) {
         {/* PASSWORD INPUT */}
         <View style={styles.formFieldContainer}>
           <Text style={pallette.formHeading}>Confirm Password</Text>
-          <PasswordInput password={password} setPassword={setPassword} />
+          <PasswordInput
+            password={confirmPassword}
+            setPassword={setConfirmPassword}
+          />
         </View>
       </View>
+      {error && <Text style={styles.error}>{error}</Text>}
 
       <View style={styles.buttonContainer}>
         <PrimaryButton
-          title={"Sign Up"}
-          onPress={() => console.log("Pressed!")}
+          loading={loading}
+          title={loading ? "Signing Up" : "Sign Up"}
+          onPress={signUpHandler}
         />
       </View>
 

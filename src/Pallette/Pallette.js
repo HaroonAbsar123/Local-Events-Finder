@@ -23,6 +23,10 @@ function usePallette() {
       marginTop: 10,
       fontSize: 15,
     },
+    text: {
+      color: colorScheme === "dark" ? "#eee" : "#6e6e6e",
+      fontSize: 15
+    },
     formHeading: {
       color: colorScheme === "dark" ? "#fff" : "#4e4e4e",
       fontSize: 15,

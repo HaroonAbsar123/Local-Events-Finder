@@ -1,11 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Pressable, View, useColorScheme } from "react-native";
-import About from "../screens/loggedIn/About";
+import { Pressable, View, useColorScheme, Image } from "react-native";
+import Profile from "../screens/loggedIn/Profile";
 import Home from "../screens/loggedIn/Home";
+import Events from "../screens/loggedIn/Events";
 import TabBarIcon from "../components/BottomTabs/TabBarIcon";
 import TabBarText from "../components/BottomTabs/TabBarText";
-import Entypo from "@expo/vector-icons/Entypo";
+import Logo from "../assets/logoWhite.png";
 
 const Tabs = createBottomTabNavigator();
 
@@ -37,7 +38,7 @@ export const BottomTabs = () => {
       />
       <Tabs.Screen
         name="Events"
-        component={Home}
+        component={Events}
         options={{
           tabBarLabel: () => null,
           tabBarButton: ({ onPress }) => (
@@ -46,14 +47,14 @@ export const BottomTabs = () => {
         }}
       />
       <Tabs.Screen
-        name="About"
-        component={About}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title="About" />
+            <TabBarText focused={focused} title="Profile" />
           ),
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={"information-circle"} />
+            <TabBarIcon focused={focused} icon={"user"} />
           ),
         }}
       />
@@ -83,7 +84,12 @@ function CustomEventButton({ onPress }) {
           display: "flex",
         }}
       >
-        <Entypo name="location-pin" size={40} color={"#F8EDED"} />
+        <Image
+          source={Logo}
+          alt=""
+          style={{ width: 50, height: 50, objectFit: "contain" }}
+        />
+        {/* <Entypo name="location-pin" size={40} color={"#F8EDED"} /> */}
       </Pressable>
     </View>
   );

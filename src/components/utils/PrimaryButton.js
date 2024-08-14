@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useColorScheme } from "react-native";
 
-export default function PrimaryButton({ title, onPress }) {
+export default function PrimaryButton({ title, onPress, loading }) {
   let colorScheme = useColorScheme();
 
   const styles = StyleSheet.create({
@@ -28,6 +28,7 @@ export default function PrimaryButton({ title, onPress }) {
   return (
     <View style={styles.container}>
       <Pressable
+        disabled={loading}
         onPress={onPress}
         android_ripple={{ color: "#ffb795" }}
         style={styles.pressable}

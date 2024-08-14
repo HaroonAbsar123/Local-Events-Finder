@@ -7,15 +7,16 @@ import Register from "../screens/loggedOut/Register/Register";
 const MainStack = createNativeStackNavigator();
 
 export const Main = () => {
+
   return (
     <MainStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-    <MainStack.Screen name="BottomTabs" component={BottomTabs} />
-    <MainStack.Screen name="Login" component={Login} />
-    <MainStack.Screen name="Register" component={Register} />
+      <MainStack.Screen name="Login" component={Login} />
+      <MainStack.Screen name="Register" component={Register} />
+      <MainStack.Screen name="BottomTabs" component={BottomTabs} />
     </MainStack.Navigator>
   );
 };

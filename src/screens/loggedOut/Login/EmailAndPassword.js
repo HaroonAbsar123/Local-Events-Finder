@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,13 +12,50 @@ import PasswordInput from "../../../components/utils/PasswordInput";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
 import Logo from "../../../assets/logo.png";
 import usePallette from "../../../Pallette/Pallette";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../../firebase";
+import { AppContext } from "../../../context/AppContext";
+import { doc, getDoc } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function EmailAndPassword({ navigation }) {
+  const { setUserDetails } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const colorScheme = useColorScheme();
   const pallette = usePallette();
+
+  async function signInHandler() {
+    try {
+      setLoading(true);
+      setError(null);
+      if (!email || !password) {
+        if (!email) {
+          setError("Please enter email");
+        } else if (!password) {
+          setError("Please enter password");
+        }
+        return;
+      }
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const userDetails = await getDoc(doc(db, "userList", userCredential.user.uid));
+      setUserDetails(userDetails);
+      AsyncStorage.setItem("userId", userCredential.user.uid)
+      navigation.replace("BottomTabs");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -75,6 +112,11 @@ export default function EmailAndPassword({ navigation }) {
       color: colorScheme === "dark" ? "#fff" : "#5e5e5e",
       fontSize: 15,
     },
+    error: {
+      color: "red",
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
   });
 
   return (
@@ -98,6 +140,7 @@ export default function EmailAndPassword({ navigation }) {
           <TextInput
             style={pallette.formInput}
             placeholder="example@gmail.com"
+            keyboardType="email-address"
             value={email}
             onChangeText={(text) => setEmail(text)}
             placeholderTextColor={"#9e9e9e"}
@@ -113,10 +156,13 @@ export default function EmailAndPassword({ navigation }) {
 
       <Text style={styles.forgotPassword}>Forgot Password?</Text>
 
+      {error && <Text style={styles.error}>{error}</Text>}
+
       <View style={styles.buttonContainer}>
         <PrimaryButton
-          title={"Sign In"}
-          onPress={() => console.log("Pressed!")}
+          title={loading ? "Signing In" : "Sign In"}
+          onPress={signInHandler}
+          loading={loading}
         />
       </View>
 

@@ -3,7 +3,10 @@ import { StyleSheet, Text, View, TextInput } from "react-native";
 import { useColorScheme } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 
-export default function PasswordInput({ password, setPassword }) {
+export default function PasswordInput({
+  password,
+  setPassword,
+}) {
   const [securePassword, setSecurePassword] = useState(true);
 
   let colorScheme = useColorScheme();
