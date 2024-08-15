@@ -69,7 +69,7 @@ function CustomEventButton({ onPress }) {
         backgroundColor: "#ff8043",
         height: 60,
         width: 60,
-        borderRadius: 20,
+        borderRadius: 30,
         transform: "translateY(-20px)",
         overflow: "hidden",
       }}

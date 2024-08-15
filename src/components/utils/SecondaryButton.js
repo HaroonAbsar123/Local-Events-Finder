@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 
-export default function PrimaryButton({ title, onPress, loading, color, borderRadius }) {
+export default function SecondaryButton({ title, onPress, loading, color }) {
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: color,
-      borderRadius: borderRadius,
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderColor: color,
+      borderRadius: 10,
       overflow: "hidden",
     },
     pressable: {
@@ -18,7 +20,7 @@ export default function PrimaryButton({ title, onPress, loading, color, borderRa
     },
     text: {
       textAlign: "center",
-      color: "#fff",
+      color: color,
       fontSize: 16,
     },
   });
@@ -28,7 +30,7 @@ export default function PrimaryButton({ title, onPress, loading, color, borderRa
       <Pressable
         disabled={loading}
         onPress={onPress}
-        android_ripple={{ color: "rgba(255,255,255,0.3)" }}
+        android_ripple={{ color: "#ffb795" }}
         style={styles.pressable}
       >
         <Text style={styles.text}>{title}</Text>

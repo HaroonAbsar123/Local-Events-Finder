@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useColorScheme } from "react-native";
-import GenericStatusBar from "../../components/utils/GenericStatusBar";
 import usePallette from "../../Pallette/Pallette";
 
 export default function Events() {
@@ -21,7 +20,6 @@ export default function Events() {
 
   return (
     <View style={pallette.screen}>
-    <GenericStatusBar />
       <Text style={styles.text}>
         Open up Events.js to start working on your app!
       </Text>

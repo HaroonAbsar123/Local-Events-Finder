@@ -2,7 +2,6 @@ import { StyleSheet,  View, ScrollView } from "react-native";
 import { useColorScheme } from "react-native";
 import EmailAndPassword from "./EmailAndPassword";
 import usePallette from "../../../Pallette/Pallette";
-import GenericStatusBar from "../../../components/utils/GenericStatusBar";
 
 export default function Register({navigation}) {
   const colorScheme = useColorScheme();
@@ -21,7 +20,6 @@ export default function Register({navigation}) {
 
   return (
     <View style={pallette.screen}>
-    <GenericStatusBar />
       <ScrollView style={styles.scrollView}>
         <EmailAndPassword navigation={navigation}/>
       </ScrollView>

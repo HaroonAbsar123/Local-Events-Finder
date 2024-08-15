@@ -13,8 +13,9 @@ import { auth } from "../../firebase";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import DummyUser from "../../assets/dummyUser.png";
-import { StatusBar } from "expo-status-bar";
-
+import SecondaryButton from "../../components/utils/SecondaryButton";
+import PrimaryButton from "../../components/utils/PrimaryButton";
+import TertiaryButton from "../../components/utils/TertiaryButton";
 
 export default function Profile({ navigation }) {
   const { userDetails } = useContext(AppContext);
@@ -29,19 +30,27 @@ export default function Profile({ navigation }) {
       width: "100%",
     },
     avatarContainer: {
-      paddingTop: 50,
-      paddingBottom: 50,
-      backgroundColor: '#ff8043',
+      paddingTop: 30,
+      paddingBottom: 30,
+      backgroundColor: "#ff8043",
       borderBottomLeftRadius: 20,
       borderBottomRightRadius: 20,
       elevation: 10,
-      marginBottom: 20
+      marginBottom: 10,
     },
     name: {
       ...pallette.primaryHeading,
-      color: '#fff',
-      fontSize: 35
-    }
+      color: "#fff",
+      fontSize: 35,
+    },
+    actionsContainer: {
+      backgroundColor: "#fff",
+      margin: 20,
+      padding: 10,
+      borderRadius: 15,
+      elevation: 10,
+      marginBottom: 30,
+    },
   });
 
   async function logoutHandler() {
@@ -50,47 +59,75 @@ export default function Profile({ navigation }) {
     navigation.replace("Login");
   }
 
-  const fetchUserId = async () => {
-    try {
-      const value = await AsyncStorage.getItem("userId");
-      if (value !== null) {
-        console.log("userId", value);
-      } else {
-        console.log("No Value");
-      }
-    } catch (error) {
-      console.error("Error retrieving userId from AsyncStorage:", error);
-    }
-  };
-
   return (
     <View style={pallette.screen}>
-        <StatusBar style={colorScheme} backgroundColor={"#ff8043"} />
       <ScrollView style={styles.container}>
-      <View style={styles.avatarContainer}>
-              <View
+        <View style={styles.avatarContainer}>
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            <View
+              style={{
+                borderRadius: 75,
+                objectFit: "contain",
+                height: 120,
+                width: 120,
+                elevation: 20,
+                overflow: "hidden",
+              }}
+            >
+              <Image
+                source={DummyUser}
+                alt="user"
                 style={{
-                  width: "100%",
-                  alignItems: 'center',
-                  marginBottom: 10
+                  borderRadius: 75,
+                  objectFit: "contain",
+                  height: 120,
+                  width: 120,
                 }}
-              >
-                <Image
-                  source={DummyUser}
-                  alt="user"
-                  style={{
-                    borderRadius: 30,
-                    objectFit: "contain",
-                    height: 150,
-                    width: 150,
-                  }}
-                />
-              </View>
-              <Text style={styles.name}>{userDetails?.name}</Text>
-              <Text style={{ ...pallette.text, textAlign: "center", color: '#fff' }}>
-                {userDetails?.email}
-              </Text>
+              />
             </View>
+          </View>
+          <Text style={styles.name}>{userDetails?.name}</Text>
+          <Text
+            style={{ ...pallette.text, textAlign: "center", color: "#fff", fontSize: 18 }}
+          >
+            {userDetails?.email}
+          </Text>
+        </View>
+        <View style={styles.actionsContainer}>
+          <TertiaryButton
+            title="Edit Profile"
+            onPress={() => console.log("Pressed")}
+            loading={false}
+            color="#ff8043"
+            borderRadius={5}
+            borderTopColor={"transparent"}
+            borderTopWidth={2}
+          />
+          <TertiaryButton
+            title="Saved"
+            onPress={() => console.log("Pressed")}
+            loading={false}
+            color="#ff8043"
+            borderRadius={5}
+            borderTopColor={"#ccc"}
+            borderTopWidth={2}
+          />
+          <TertiaryButton
+            title="Logout"
+            onPress={logoutHandler}
+            loading={false}
+            color="#ff8043"
+            borderRadius={5}
+            borderTopColor={"#ccc"}
+            borderTopWidth={2}
+          />
+        </View>
       </ScrollView>
     </View>
   );

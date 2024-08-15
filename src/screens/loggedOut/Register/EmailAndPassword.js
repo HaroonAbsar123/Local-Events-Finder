@@ -203,6 +203,8 @@ export default function EmailAndPassword({ navigation }) {
           loading={loading}
           title={loading ? "Signing Up" : "Sign Up"}
           onPress={signUpHandler}
+          color="#ff8043"
+          borderRadius={30}
         />
       </View>
 
