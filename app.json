@@ -16,8 +16,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/logoWhite.png",
+        "backgroundColor": "#ff8043"
       },
       "package": "com.haroonabsar3.localeventsfinder"
     },
