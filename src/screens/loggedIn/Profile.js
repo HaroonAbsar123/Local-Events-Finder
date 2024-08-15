@@ -33,10 +33,10 @@ export default function Profile({ navigation }) {
       paddingTop: 30,
       paddingBottom: 30,
       backgroundColor: "#ff8043",
-      borderBottomLeftRadius: 20,
-      borderBottomRightRadius: 20,
+      borderRadius: 20,
       elevation: 10,
-      marginBottom: 10,
+      margin: 10,
+      marginTop: 0
     },
     name: {
       ...pallette.primaryHeading,
@@ -45,7 +45,7 @@ export default function Profile({ navigation }) {
     },
     actionsContainer: {
       backgroundColor: "#fff",
-      margin: 20,
+      margin: 30,
       padding: 10,
       borderRadius: 15,
       elevation: 10,
@@ -76,7 +76,6 @@ export default function Profile({ navigation }) {
                 objectFit: "contain",
                 height: 120,
                 width: 120,
-                elevation: 20,
                 overflow: "hidden",
               }}
             >
