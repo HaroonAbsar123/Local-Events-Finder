@@ -1,12 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Pressable, View, useColorScheme, Image } from "react-native";
-import Profile from "../screens/loggedIn/Profile";
-import Home from "../screens/loggedIn/Home";
-import Events from "../screens/loggedIn/Events";
 import TabBarIcon from "../components/BottomTabs/TabBarIcon";
 import TabBarText from "../components/BottomTabs/TabBarText";
 import Logo from "../assets/logoWhite.png";
+import Profile from "../screens/loggedIn/Profile/Profile";
+import Home from "../screens/loggedIn/Saved/Home";
+import Events from "../screens/loggedIn/Events/Events";
+import Entypo from '@expo/vector-icons/Entypo';
 
 const Tabs = createBottomTabNavigator();
 
@@ -25,14 +26,14 @@ export const BottomTabs = () => {
       initialRouteName="Home"
     >
       <Tabs.Screen
-        name="Home"
+        name="Saved"
         component={Home}
         options={{
           tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title="Home" />
+            <TabBarText focused={focused} title="Saved" />
           ),
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={"home"} />
+            <TabBarIcon focused={focused} icon={"heart"} />
           ),
         }}
       />

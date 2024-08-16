@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useColorScheme } from "react-native";
-import usePallette from "../../Pallette/Pallette";
+import usePallette from "../../../Pallette/Pallette";
 
 export default function Home() {
   const colorScheme = useColorScheme();

@@ -6,8 +6,9 @@ export default function GenericStatusBar() {
 
   return (
     <StatusBar
-      style={colorScheme === "dark" ? "light" : "dark"}
-      backgroundColor={colorScheme === "dark" ? "#2e2e2e" : "#F8EDED"}
+    style={"auto"}
+      // style={colorScheme === "dark" ? "light" : "dark"}
+      // backgroundColor={colorScheme === "dark" ? "#2e2e2e" : "#F8EDED"}
     />
   );
 }

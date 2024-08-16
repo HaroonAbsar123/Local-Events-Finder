@@ -4,6 +4,7 @@ import EmailAndPassword from "./EmailAndPassword";
 import usePallette from "../../../Pallette/Pallette";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Login({navigation}) {
   const colorScheme = useColorScheme();
@@ -36,10 +37,12 @@ export default function Login({navigation}) {
   });
 
   return (
+    <SafeAreaView style={{ flex: 1}}>
     <View style={pallette.screen}>
       <ScrollView style={styles.scrollView}>
         <EmailAndPassword navigation={navigation}/>
       </ScrollView>
     </View>
+      </SafeAreaView>
   );
 }

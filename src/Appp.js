@@ -15,10 +15,9 @@ export default function App() {
     <AppContextProvider>
       <GenericStatusBar />
     <NavigationContainer>
-      <SafeAreaView style={{ flex: 1}}>
-        <Main
-        />
-      </SafeAreaView>
+      {/* <SafeAreaView style={{ flex: 1}}> */}
+        <Main />
+      {/* </SafeAreaView> */}
     </NavigationContainer>
     </AppContextProvider>
   );

@@ -1,8 +1,7 @@
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "react-native";
-// import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Entypo from '@expo/vector-icons/Entypo';
 
 
 export default function TabBarIcon(props) {
@@ -24,7 +23,7 @@ export default function TabBarIcon(props) {
           }
         />
       ) : (
-        <Ionicons
+        <Entypo
           name={props.icon}
           style={{ marginBottom: -7 }}
           size={24}

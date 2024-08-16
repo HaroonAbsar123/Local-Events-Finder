@@ -7,15 +7,13 @@ import {
   Image,
 } from "react-native";
 import { useColorScheme } from "react-native";
-import usePallette from "../../Pallette/Pallette";
+import usePallette from "../../../Pallette/Pallette";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { auth } from "../../firebase";
+import { auth } from "../../../firebase";
 import { useContext } from "react";
-import { AppContext } from "../../context/AppContext";
-import DummyUser from "../../assets/dummyUser.png";
-import SecondaryButton from "../../components/utils/SecondaryButton";
-import PrimaryButton from "../../components/utils/PrimaryButton";
-import TertiaryButton from "../../components/utils/TertiaryButton";
+import { AppContext } from "../../../context/AppContext";
+import DummyUser from "../../../assets/dummyUser.png";
+import TertiaryButton from "../../../components/utils/TertiaryButton";
 
 export default function Profile({ navigation }) {
   const { userDetails } = useContext(AppContext);
@@ -30,13 +28,11 @@ export default function Profile({ navigation }) {
       width: "100%",
     },
     avatarContainer: {
-      paddingTop: 30,
+      paddingTop: 50,
       paddingBottom: 30,
       backgroundColor: "#ff8043",
       borderRadius: 20,
       elevation: 10,
-      margin: 10,
-      marginTop: 0
     },
     name: {
       ...pallette.primaryHeading,

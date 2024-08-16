@@ -46,8 +46,6 @@ export default function EmailAndPassword({ navigation }) {
         email,
         password
       );
-      const userDetails = await getDoc(doc(db, "userList", userCredential.user.uid));
-      setUserDetails(userDetails);
       AsyncStorage.setItem("userId", userCredential.user.uid)
       navigation.replace("BottomTabs");
     } catch (error) {

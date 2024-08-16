@@ -39,6 +39,9 @@ function usePallette() {
       borderWidth: 1,
       borderColor: "#9e9e9e",
       borderRadius: 5
+    },
+    textColor: {
+      color: colorScheme === "dark" ? "#eee" : "#6e6e6e",
     }
   });
 
