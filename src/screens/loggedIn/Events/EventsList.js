@@ -1,26 +1,25 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
-import { useColorScheme } from "react-native";
-import usePallette from "../../../Pallette/Pallette";
 import EventItem from "./EventItem";
 
 export default function EventsList() {
-  const colorScheme = useColorScheme();
-  const pallette = usePallette();
+  const [events, setEvents] = useState([]);
 
-  const data = [
-    { id: '1' },
-    { id: '2' },
-    { id: '3' },
-    { id: '4' },
-    { id: '5' },
-    { id: '6' },
-    { id: '7' },
-    { id: '8' },
-    { id: '9' },
-    { id: '10' },
-    { id: '11' },
-    { id: '12' },
-  ];
+  useEffect(() => {
+    async function fetchEventsHandler(){
+      const response = await fetch('https://www.eventbriteapi.com/v3/organizations/1466912144973/events?token=NBTMWUACKFEOM2VLR6IJ');
+      const data = await response.json();
+
+      const sortedEvents = data.events.sort((a, b) => {
+      const dateA = new Date(a.changed || a.created);
+      const dateB = new Date(b.changed || b.created);
+      return dateB - dateA;
+    });
+
+    setEvents(sortedEvents);
+    }
+    fetchEventsHandler();
+  }, [])
 
   const styles = StyleSheet.create({
     container: {
@@ -30,19 +29,26 @@ export default function EventsList() {
     },
     itemContainer: {
       flex: 1,
-      margin: 5,
+      margin: 3,
     },
+    singleItemContainer: {
+      flex: 0.5,
+      margin: 3,
+    }
   });
 
-  const renderItem = () => (
-    <View style={styles.itemContainer}>
-      <EventItem />
-    </View>
-  );
+  const renderItem = ({item, index}) => {
+    const isLastItemInRow = index === events.length - 1 && events.length % 2 !== 0;
+    return(
+      <View style={isLastItemInRow ? styles.singleItemContainer : styles.itemContainer}>
+        <EventItem item={item} />
+      </View>
+    )
+  };
 
   return (
     <FlatList
-      data={data}
+      data={events}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       numColumns={2}

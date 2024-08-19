@@ -5,10 +5,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { Dimensions } from "react-native";
 import EventsList from "./EventsList";
+import { useEffect, useState } from "react";
 
-export default function Events() {
+export default function Saved() {
   const colorScheme = useColorScheme();
   const pallette = usePallette();
+
+
 
   const { width } = Dimensions.get("window");
 
@@ -21,7 +24,6 @@ export default function Events() {
       flex: 1,
       height: "100%",
       width: width,
-      display: 'flex',
     },
     topHeading: {
       ...pallette.primaryHeading,
@@ -51,11 +53,11 @@ export default function Events() {
     <View style={pallette.screen}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.scrollView}>
-          <Text style={styles.topHeading}>Discover Events</Text>
+          <Text style={styles.topHeading}>Saved Events</Text>
           <View style={styles.searchBar}>
             <Feather name="search" size={24} color={"#9e9e9e"} />
             <TextInput
-              placeholder="Search events"
+              placeholder="Search saved events"
               style={styles.searchInput}
               placeholderTextColor={"#9e9e9e"}
             />

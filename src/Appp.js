@@ -7,8 +7,8 @@ import "./firebase";
 import GenericStatusBar from "./components/utils/GenericStatusBar";
 
 export default function App() {
-  Appearance.setColorScheme("light");
-  // Appearance.setColorScheme("dark");
+  // Appearance.setColorScheme("light");
+  Appearance.setColorScheme("dark");
 
 
   return (

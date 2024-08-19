@@ -5,9 +5,8 @@ import TabBarIcon from "../components/BottomTabs/TabBarIcon";
 import TabBarText from "../components/BottomTabs/TabBarText";
 import Logo from "../assets/logoWhite.png";
 import Profile from "../screens/loggedIn/Profile/Profile";
-import Home from "../screens/loggedIn/Saved/Home";
 import Events from "../screens/loggedIn/Events/Events";
-import Entypo from '@expo/vector-icons/Entypo';
+import Saved from "../screens/loggedIn/Saved/Saved";
 
 const Tabs = createBottomTabNavigator();
 
@@ -23,11 +22,11 @@ export const BottomTabs = () => {
           backgroundColor: colorScheme === "dark" ? "#1e1e1e" : "#ffffff",
         },
       }}
-      initialRouteName="Home"
+      initialRouteName="Events"
     >
       <Tabs.Screen
         name="Saved"
-        component={Home}
+        component={Saved}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarText focused={focused} title="Saved" />
@@ -90,7 +89,6 @@ function CustomEventButton({ onPress }) {
           alt=""
           style={{ width: 50, height: 50, objectFit: "contain" }}
         />
-        {/* <Entypo name="location-pin" size={40} color={"#F8EDED"} /> */}
       </Pressable>
     </View>
   );
