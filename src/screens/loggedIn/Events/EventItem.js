@@ -87,13 +87,6 @@ export default function EventItem({ item, navigation }) {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    // Log the formatted date and time
-    console.log("Formatted Date:", `${day} ${month}, ${year}`);
-    console.log(
-      "Formatted Time:",
-      `${formattedHours}:${formattedMinutes} ${ampm}`
-    );
-
     // Return the formatted date and time separately
     return {
       time: `${formattedHours}:${formattedMinutes} ${ampm}`,

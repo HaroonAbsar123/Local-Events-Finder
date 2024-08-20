@@ -9,13 +9,12 @@ export default function App() {
   // Appearance.setColorScheme("light");
   // Appearance.setColorScheme("dark");
 
-
   return (
     <AppContextProvider>
       <GenericStatusBar />
-    <NavigationContainer>
+      <NavigationContainer>
         <Main />
-    </NavigationContainer>
+      </NavigationContainer>
     </AppContextProvider>
   );
 }

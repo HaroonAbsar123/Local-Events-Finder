@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import usePallette from "../../../Pallette/Pallette";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
+import DummyImage from "../../../assets/event.jpg"
 
 export default function EventInfo({ navigation, route }) {
   const { item } = route.params;
@@ -46,7 +47,7 @@ export default function EventInfo({ navigation, route }) {
       margin: 20,
       padding: 10,
       borderRadius: 15,
-      elevation: 10,
+      elevation: 3,
       marginBottom: 30,
       borderWidth: 1,
       borderColor: "#ff8043",
@@ -87,12 +88,6 @@ export default function EventInfo({ navigation, route }) {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    // Log the formatted date and time
-    console.log("Formatted Date:", `${day} ${month}, ${year}`);
-    console.log(
-      "Formatted Time:",
-      `${formattedHours}:${formattedMinutes} ${ampm}`
-    );
 
     // Return the formatted date and time separately
     return {
@@ -115,7 +110,7 @@ export default function EventInfo({ navigation, route }) {
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
           <Image
-            source={{ uri: item?.logo?.url }}
+            source={item?.logo?.url ? { uri: item?.logo?.url } : DummyImage}
             alt="Image"
             style={{ height: "100%", width: "100%", objectFit: "cover" }}
           />
