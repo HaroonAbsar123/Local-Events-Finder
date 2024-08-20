@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
 import DummyUser from "../../../assets/dummyUser.png";
 import TertiaryButton from "../../../components/utils/TertiaryButton";
+import { Appearance } from "react-native";
 
 export default function Profile({ navigation }) {
   const { userDetails } = useContext(AppContext);
@@ -98,13 +99,22 @@ export default function Profile({ navigation }) {
         </View>
         <View style={styles.actionsContainer}>
           <TertiaryButton
+            title={colorScheme === "dark" ? "Light Mode" : "Dark Mode"}
+            onPress={() => Appearance.setColorScheme( colorScheme === "dark" ? "light" : "dark")}
+            loading={false}
+            color="#ff8043"
+            borderRadius={5}
+            borderTopColor={"transparent"}
+            borderTopWidth={0}
+          />
+          <TertiaryButton
             title="Edit Profile"
             onPress={() => console.log("Pressed")}
             loading={false}
             color="#ff8043"
             borderRadius={5}
-            borderTopColor={"transparent"}
-            borderTopWidth={2}
+            borderTopColor={"#ff8043"}
+            borderTopWidth={1}
           />
           <TertiaryButton
             title="Saved"
@@ -115,6 +125,15 @@ export default function Profile({ navigation }) {
             borderTopColor={"#ff8043"}
             borderTopWidth={1}
           />
+          {/* <TertiaryButton
+            title="Light Theme"
+            onPress={() => Appearance.setColorScheme("light")}
+            loading={false}
+            color="#ff8043"
+            borderRadius={5}
+            borderTopColor={"#ff8043"}
+            borderTopWidth={1}
+          /> */}
           <TertiaryButton
             title="Logout"
             onPress={logoutHandler}

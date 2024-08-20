@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 
-export default function TertiaryButton({ title, onPress, loading, color, borderTopColor, borderTopWidth }) {
+export default function TertiaryButton({ title, onPress, loading, color, borderTopColor, borderTopWidth, borderRadius }) {
 
   const styles = StyleSheet.create({
     container: {
