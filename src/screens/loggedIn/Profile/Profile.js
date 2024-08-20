@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   ScrollView,
   Image,
 } from "react-native";
@@ -31,7 +30,8 @@ export default function Profile({ navigation }) {
       paddingTop: 50,
       paddingBottom: 30,
       backgroundColor: "#ff8043",
-      borderRadius: 20,
+      borderBottomLeftRadius: 20,
+      borderBottomRightRadius: 20,
       elevation: 10,
     },
     name: {
@@ -40,12 +40,14 @@ export default function Profile({ navigation }) {
       fontSize: 35,
     },
     actionsContainer: {
-      backgroundColor: "#fff",
+      backgroundColor: colorScheme === "dark" ? "#3e3e3e" : "#fff",
       margin: 30,
       padding: 10,
       borderRadius: 15,
       elevation: 10,
       marginBottom: 30,
+      borderWidth: 1,
+      borderColor: "#ff8043"
     },
   });
 
@@ -110,8 +112,8 @@ export default function Profile({ navigation }) {
             loading={false}
             color="#ff8043"
             borderRadius={5}
-            borderTopColor={"#ccc"}
-            borderTopWidth={2}
+            borderTopColor={"#ff8043"}
+            borderTopWidth={1}
           />
           <TertiaryButton
             title="Logout"
@@ -119,8 +121,8 @@ export default function Profile({ navigation }) {
             loading={false}
             color="#ff8043"
             borderRadius={5}
-            borderTopColor={"#ccc"}
-            borderTopWidth={2}
+            borderTopColor={"#ff8043"}
+            borderTopWidth={1}
           />
         </View>
       </ScrollView>

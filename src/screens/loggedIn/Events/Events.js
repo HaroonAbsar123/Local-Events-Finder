@@ -6,7 +6,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { Dimensions } from "react-native";
 import EventsList from "./EventsList";
 
-export default function Events() {
+export default function Events({navigation}) {
   const colorScheme = useColorScheme();
   const pallette = usePallette();
 
@@ -39,6 +39,7 @@ export default function Events() {
       marginTop: 10,
       marginBottom: 10,
       backgroundColor: colorScheme === "dark" ? "transparent" : "#fff",
+      elevation: 2
     },
     searchInput: {
       flex: 1,
@@ -60,7 +61,7 @@ export default function Events() {
               placeholderTextColor={"#9e9e9e"}
             />
           </View>
-          <EventsList />
+          <EventsList navigation={navigation} />
         </View>
       </SafeAreaView>
     </View>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import EventItem from "./EventItem";
 
-export default function EventsList() {
+export default function EventsList({navigation}) {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function EventsList() {
     const isLastItemInRow = index === events.length - 1 && events.length % 2 !== 0;
     return(
       <View style={isLastItemInRow ? styles.singleItemContainer : styles.itemContainer}>
-        <EventItem item={item} />
+        <EventItem item={item} navigation={navigation}/>
       </View>
     )
   };
@@ -51,7 +51,7 @@ export default function EventsList() {
       data={events}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-      numColumns={2}
+      numColumns={1}
       contentContainerStyle={styles.container}
     />
   );

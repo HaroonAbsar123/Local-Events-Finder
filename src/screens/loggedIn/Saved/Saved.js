@@ -5,13 +5,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { Dimensions } from "react-native";
 import EventsList from "./EventsList";
-import { useEffect, useState } from "react";
 
 export default function Saved() {
   const colorScheme = useColorScheme();
   const pallette = usePallette();
-
-
 
   const { width } = Dimensions.get("window");
 
@@ -24,6 +21,7 @@ export default function Saved() {
       flex: 1,
       height: "100%",
       width: width,
+      display: 'flex',
     },
     topHeading: {
       ...pallette.primaryHeading,
@@ -41,6 +39,7 @@ export default function Saved() {
       marginTop: 10,
       marginBottom: 10,
       backgroundColor: colorScheme === "dark" ? "transparent" : "#fff",
+      elevation: 2
     },
     searchInput: {
       flex: 1,
