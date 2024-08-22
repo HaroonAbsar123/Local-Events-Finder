@@ -26,7 +26,6 @@ export default function Profile({ navigation }) {
   const colorScheme = useColorScheme();
   const pallette = usePallette();
   const [uploading, setUploading] = useState(false);
-  const [imageUri, setImageUri] = useState(null);
 
 
   const styles = StyleSheet.create({

@@ -12,10 +12,9 @@ import PasswordInput from "../../../components/utils/PasswordInput";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
 import Logo from "../../../assets/logo.png";
 import usePallette from "../../../Pallette/Pallette";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../../firebase";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firebase";
 import { AppContext } from "../../../context/AppContext";
-import { doc, getDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function EmailAndPassword({ navigation }) {
@@ -55,6 +54,20 @@ export default function EmailAndPassword({ navigation }) {
     }
   }
 
+  async function forgotPassword(){
+    if(email!==""){
+    try{
+      await sendPasswordResetEmail(auth, email);
+      alert(`Password reset email sent on ${email}`)
+      setError(null)
+    } catch(e){
+      console.error(e)
+    }
+  } else {
+    setError("Please enter email");
+  }
+  }
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -152,7 +165,9 @@ export default function EmailAndPassword({ navigation }) {
         </View>
       </View>
 
+      <Pressable onPress={forgotPassword}>
       <Text style={styles.forgotPassword}>Forgot Password?</Text>
+      </Pressable>
 
       {error && <Text style={styles.error}>{error}</Text>}
 
