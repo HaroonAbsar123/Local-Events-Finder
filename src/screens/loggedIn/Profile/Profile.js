@@ -45,7 +45,7 @@ export default function Profile({ navigation }) {
       margin: 30,
       padding: 10,
       borderRadius: 15,
-      elevation: 10,
+      // elevation: 10,
       marginBottom: 30,
       borderWidth: 1,
       borderColor: "#ff8043"
@@ -116,7 +116,7 @@ export default function Profile({ navigation }) {
             borderTopColor={"#ff8043"}
             borderTopWidth={1}
           />
-          <TertiaryButton
+          {/* <TertiaryButton
             title="Saved"
             onPress={() => console.log("Pressed")}
             loading={false}
@@ -124,7 +124,7 @@ export default function Profile({ navigation }) {
             borderRadius={5}
             borderTopColor={"#ff8043"}
             borderTopWidth={1}
-          />
+          /> */}
           {/* <TertiaryButton
             title="Light Theme"
             onPress={() => Appearance.setColorScheme("light")}

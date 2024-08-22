@@ -2,12 +2,18 @@ import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { useColorScheme } from "react-native";
 import usePallette from "../../../Pallette/Pallette";
 import DummyImage from "../../../assets/event.jpg";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../../context/AppContext";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function EventItem({ item, navigation }) {
+  const { userDetails, saved, setSaved } = useContext(AppContext);
   const colorScheme = useColorScheme();
   const pallette = usePallette();
-
+  const [savedItem, setSavedItem] = useState(false);
 
   const styles = StyleSheet.create({
     container: {
@@ -52,17 +58,17 @@ export default function EventItem({ item, navigation }) {
     },
     title: {
       // ...pallette.textColor,
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: "bold",
       color: "#ff8043",
     },
     locationContainer: {
       ...pallette.textColor,
-      fontSize: 15,
+      fontSize: 14,
     },
     timeContainer: {
-      fontSize: 15,
-      color: colorScheme === "dark" ? "#eee" : "#fff",
+      fontSize: 14,
+      color: colorScheme === "dark" ? "#eee" : "#3e3e3e",
     },
   });
 
@@ -94,9 +100,49 @@ export default function EventItem({ item, navigation }) {
     };
   }
 
+  async function onSave() {
+    try {
+      setSavedItem(true);
+      if(!saved.includes(item?.id)){
+        setSaved(prev => [...prev, item?.id])
+      }
+      // const docRef = doc(db, "userList", userDetails?.userId);
+      // await updateDoc(docRef, {
+      //   saved: arrayUnion(item?.id),
+      // });
+    } catch (e) {
+      console.error(e);
+      setSavedItem(false);
+    }
+  }
+
+  async function onUnsave() {
+    try {
+      setSavedItem(false);
+      if(saved.includes(item?.id)){
+        setSaved(saved.filter((e) => e !== item?.id))
+      }
+      // const docRef = doc(db, "userList", userDetails?.userId);
+      // await updateDoc(docRef, {
+      //   saved: arrayRemove(item?.id),
+      // });
+    } catch (e) {
+      console.error(e);
+      setSavedItem(true);
+    }
+  }
+
+  useEffect(() => {
+    if (saved?.length >= 0) {
+      setSavedItem(saved?.includes(item?.id));
+    }
+  }, [saved]);
+
+
+
   return (
     <Pressable
-      onPress={() => navigation.navigate("EventInfo", {item: item})}
+      onPress={() => navigation.navigate("EventInfo", { item: item })}
       style={styles.container}
     >
       <View style={styles.imageContainer}>
@@ -116,8 +162,13 @@ export default function EventItem({ item, navigation }) {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onPress={savedItem ? onUnsave : onSave}
           >
-            <AntDesign name="hearto" size={25} color={"#ff8043"} />
+            {savedItem ? (
+              <FontAwesome name="heart" size={25} color="#ff8043" />
+            ) : (
+              <Feather name="heart" size={25} color={"#ff8043"} />
+            )}
           </Pressable>
         </View>
       </View>
@@ -125,8 +176,10 @@ export default function EventItem({ item, navigation }) {
         <View>
           <Text style={styles.title}>{item?.name?.text}</Text>
           <Text style={styles.locationContainer}>
-            {item?.description?.text?.slice(0, 60)}...
-          </Text>
+  {item?.description?.text?.length > 60 
+    ? `${item?.description?.text?.slice(0, 60)}...` 
+    : item?.description?.text}
+</Text>
         </View>
         <View
           style={{
@@ -147,7 +200,6 @@ export default function EventItem({ item, navigation }) {
     </Pressable>
   );
 }
-
 
 const months = [
   "Jan",

@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, useColorScheme } from "react-native";
 
 export default function TertiaryButton({ title, onPress, loading, color, borderTopColor, borderTopWidth, borderRadius }) {
+  const colorScheme = useColorScheme();
 
   const styles = StyleSheet.create({
     container: {
@@ -29,7 +30,7 @@ export default function TertiaryButton({ title, onPress, loading, color, borderT
       <Pressable
         disabled={loading}
         onPress={onPress}
-        android_ripple={{ color: "#ffb795" }}
+        android_ripple={{ color: colorScheme === "dark" ? "#5e5e5e" : "#ddd" }}
         style={styles.pressable}
       >
         <Text style={styles.text}>{title}</Text>

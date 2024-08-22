@@ -24,7 +24,7 @@ export const BottomTabs = () => {
       }}
       initialRouteName="Events"
     >
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="Saved"
         component={Saved}
         options={{
@@ -43,6 +43,19 @@ export const BottomTabs = () => {
           tabBarLabel: () => null,
           tabBarButton: ({ onPress }) => (
             <CustomEventButton onPress={onPress} />
+          ),
+        }}
+      /> */}
+      
+      <Tabs.Screen
+        name="Events"
+        component={Events}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <TabBarText focused={focused} title="Events" />
+          ),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} icon={"find"} />
           ),
         }}
       />

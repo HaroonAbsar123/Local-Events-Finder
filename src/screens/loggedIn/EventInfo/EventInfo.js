@@ -5,14 +5,23 @@ import {
   ScrollView,
   Image,
   useColorScheme,
+  Pressable,
 } from "react-native";
 import usePallette from "../../../Pallette/Pallette";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
-import DummyImage from "../../../assets/event.jpg"
+import DummyImage from "../../../assets/event.jpg";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
+import Feather from "@expo/vector-icons/Feather";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { AppContext } from "../../../context/AppContext";
+import { useContext, useEffect, useState } from "react";
 
 export default function EventInfo({ navigation, route }) {
   const { item } = route.params;
+  const { saved, setSaved } = useContext(AppContext);
   const colorScheme = useColorScheme();
+  const [savedItem, setSavedItem] = useState(false);
 
   const pallette = usePallette();
 
@@ -25,6 +34,23 @@ export default function EventInfo({ navigation, route }) {
     imageContainer: {
       height: 200,
       width: "100%",
+      position: "relative",
+      overflow: "hidden",
+    },
+    saveButton: {
+      position: "absolute",
+      top: 10,
+      right: 10,
+      backgroundColor: "#fff",
+      borderRadius: 20,
+      height: 50,
+      width: 50,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      overflow: "hidden",
+      elevation: 10,
+      zIndex: 2,
     },
     infoContainer: {
       flex: 1,
@@ -34,7 +60,7 @@ export default function EventInfo({ navigation, route }) {
       fontWeight: "bold",
       fontSize: 20,
       color: "#ff8043",
-      marginTop: 10
+      marginTop: 10,
     },
     description: {
       ...pallette.textColor,
@@ -63,33 +89,28 @@ export default function EventInfo({ navigation, route }) {
     },
     buttonContainer: {
       margin: 20,
-      marginTop: 0
-    }
+      marginTop: 0,
+    },
   });
 
   function formatDateTime(dateTimeStr) {
     const date = new Date(dateTimeStr);
 
-    // Check if the date is valid
     if (isNaN(date.getTime())) {
       console.error("Invalid date format:", dateTimeStr);
-      return null; // Return null or a default value in case of an invalid date
+      return null;
     }
 
-    // Format time
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
     const formattedHours = hours % 12 || 12;
     const formattedMinutes = minutes.toString().padStart(2, "0");
 
-    // Format date
     const day = date.getDate();
     const month = date.getMonth();
     const year = date.getFullYear();
 
-
-    // Return the formatted date and time separately
     return {
       time: `${formattedHours}:${formattedMinutes} ${ampm}`,
       date: `${day} ${months[month - 1]}, ${year}`,
@@ -98,21 +119,86 @@ export default function EventInfo({ navigation, route }) {
 
   function RenderItem({ title, value, border }) {
     return (
-      <View style={{...styles.tableItem, borderBottomWidth: border ? 1 : 0}}>
+      <View style={{ ...styles.tableItem, borderBottomWidth: border ? 1 : 0 }}>
         <Text style={pallette.textColor}>{title}</Text>
         <Text style={pallette.textColor}>{value}</Text>
       </View>
     );
   }
 
+
+  async function onSave() {
+    try {
+      setSavedItem(true);
+      if(!saved.includes(item?.id)){
+        setSaved(prev => [...prev, item?.id])
+      }
+      // const docRef = doc(db, "userList", userDetails?.userId);
+      // await updateDoc(docRef, {
+      //   saved: arrayUnion(item?.id),
+      // });
+    } catch (e) {
+      console.error(e);
+      setSavedItem(false);
+    }
+  }
+
+  async function onUnsave() {
+    try {
+      setSavedItem(false);
+      if(saved.includes(item?.id)){
+        setSaved(saved.filter((e) => e !== item?.id))
+      }
+      // const docRef = doc(db, "userList", userDetails?.userId);
+      // await updateDoc(docRef, {
+      //   saved: arrayRemove(item?.id),
+      // });
+    } catch (e) {
+      console.error(e);
+      setSavedItem(true);
+    }
+  }
+
+  useEffect(() => {
+    if (saved?.length >= 0) {
+      setSavedItem(saved?.includes(item?.id));
+    }
+  }, [saved]);
+
+
   return (
     <View style={pallette.screen}>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
+          <View style={styles.saveButton}>
+            <Pressable
+              android_ripple={{ color: "#ff8043" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={savedItem ? onUnsave : onSave}
+            >
+              {savedItem ? (
+                <FontAwesome name="heart" size={27} color="#ff8043" />
+              ) : (
+                <Feather name="heart" size={27} color={"#ff8043"} />
+              )}
+            </Pressable>
+          </View>
+
           <Image
             source={item?.logo?.url ? { uri: item?.logo?.url } : DummyImage}
             alt="Image"
-            style={{ height: "100%", width: "100%", objectFit: "cover" }}
+            style={{
+              height: "100%",
+              width: "100%",
+              objectFit: "cover",
+              zIndex: 1,
+            }}
           />
         </View>
         <View style={styles.infoContainer}>
@@ -120,11 +206,7 @@ export default function EventInfo({ navigation, route }) {
           <Text style={styles.description}>{item?.description?.text}</Text>
 
           <View style={styles.detailsTable}>
-            <RenderItem
-              title={"Status"}
-              value={item?.status}
-              border={true}
-            />
+            <RenderItem title={"Status"} value={item?.status} border={true} />
             <RenderItem
               title={"Start Time"}
               value={formatDateTime(item?.start?.local)?.time}
@@ -145,19 +227,17 @@ export default function EventInfo({ navigation, route }) {
               value={formatDateTime(item?.end?.local)?.date}
               border={true}
             />
-            <RenderItem
-              title={"Capacity"}
-              value={item?.capacity}
-            />
+            <RenderItem title={"Capacity"} value={item?.capacity} />
           </View>
 
           <View style={styles.buttonContainer}>
-        <PrimaryButton
-          title={"View Location"}
-          loading={false}
-          color="#ff8043"
-          borderRadius={30}
-        />
+            <PrimaryButton
+              onPress={() => navigation.navigate("Map")}
+              title={"View Location"}
+              loading={false}
+              color="#ff8043"
+              borderRadius={30}
+            />
           </View>
         </View>
       </ScrollView>

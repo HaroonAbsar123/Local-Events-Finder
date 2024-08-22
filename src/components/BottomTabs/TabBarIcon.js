@@ -2,6 +2,7 @@ import React from "react";
 import { useColorScheme } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 export default function TabBarIcon(props) {
@@ -18,12 +19,12 @@ export default function TabBarIcon(props) {
             props.focused
               ? colorScheme === "dark"
                 ? "#fff"
-                : "#5e5e5e"
+                : "#ff8043"
               : "rgb(143, 155, 179)"
           }
         />
       ) : (
-        <Entypo
+        <AntDesign
           name={props.icon}
           style={{ marginBottom: -7 }}
           size={24}
@@ -31,7 +32,7 @@ export default function TabBarIcon(props) {
             props.focused
               ? colorScheme === "dark"
                 ? "#fff"
-                : "#5e5e5e"
+                : "#ff8043"
               : "rgb(143, 155, 179)"
           }
         />

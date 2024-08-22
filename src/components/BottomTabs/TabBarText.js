@@ -14,7 +14,7 @@ export default function TabBarText(props){
         color: props.focused
           ? colorScheme==="dark"
             ? "#fff"
-            : "#1e1e1e"
+            : "#ff8043"
           : "rgb(143, 155, 179)",
         fontSize: 10,
       }}
