@@ -124,8 +124,8 @@ export function AppContextProvider({ children }) {
   const checkOnlineStatus = useCallback(async () => {
     try {
       const response = await fetch("https://www.google.com");
-      // setIsOnline(response.ok);
-      setIsOnline(false);
+      setIsOnline(response.ok);
+      // setIsOnline(false);
     } catch {
       setIsOnline(false);
     } finally {

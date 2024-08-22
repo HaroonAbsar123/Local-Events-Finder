@@ -20,12 +20,12 @@ export default function Register({navigation}) {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1}}>
     <View style={pallette.screen}>
+    <SafeAreaView style={{ flex: 1, width: '100%'}}>
       <ScrollView style={styles.scrollView}>
         <EmailAndPassword navigation={navigation}/>
       </ScrollView>
+      </SafeAreaView>
     </View>
-    </SafeAreaView>
   );
 }

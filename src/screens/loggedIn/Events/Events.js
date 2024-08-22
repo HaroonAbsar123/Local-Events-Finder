@@ -125,7 +125,7 @@ export default function Events({ navigation }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.scrollView}>
           <View style={styles.headingContainer}>
-            <Text style={styles.topHeading}>Discover Events</Text>
+            <Text style={styles.topHeading}>{filter === "all" ? "Discover Events" : "Saved Events"}</Text>
             <View style={styles.filterButton}>
               <Pressable
                 android_ripple={{ color: "#ccc" }}
@@ -143,7 +143,7 @@ export default function Events({ navigation }) {
           <View style={styles.searchBar}>
             <Feather name="search" size={24} color={"#9e9e9e"} />
             <TextInput
-              placeholder="Search events"
+              placeholder={filter === "all" ? "Search events" : "Search saved events"}
               style={styles.searchInput}
               placeholderTextColor={"#9e9e9e"}
               value={searched}
