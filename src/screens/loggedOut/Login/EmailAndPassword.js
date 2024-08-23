@@ -12,13 +12,18 @@ import PasswordInput from "../../../components/utils/PasswordInput";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
 import Logo from "../../../assets/logo.png";
 import usePallette from "../../../Pallette/Pallette";
-import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../firebase";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth, db } from "../../../firebase";
 import { AppContext } from "../../../context/AppContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { saveIdsToDb } from "../../../sqlite/SyncSaved";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function EmailAndPassword({ navigation }) {
-  const { setUserDetails } = useContext(AppContext);
+  const { setSaved } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -32,11 +37,7 @@ export default function EmailAndPassword({ navigation }) {
       setLoading(true);
       setError(null);
       if (!email || !password) {
-        if (!email) {
-          setError("Please enter email");
-        } else if (!password) {
-          setError("Please enter password");
-        }
+        setError(!email ? "Please enter email" : "Please enter password");
         return;
       }
 
@@ -45,7 +46,22 @@ export default function EmailAndPassword({ navigation }) {
         email,
         password
       );
-      AsyncStorage.setItem("userId", userCredential.user.uid)
+      const userId = userCredential.user.uid;
+      AsyncStorage.setItem("userId", userId);
+
+      // Fetch user's saved events from Firestore
+      const userDocRef = doc(db, "userList", userId);
+      const userDoc = await getDoc(userDocRef);
+      const savedFromFirestore = userDoc.exists()
+        ? userDoc.data().saved || []
+        : [];
+
+      // Store them in SQLite
+      // await saveIdsToDb(savedFromFirestore);
+
+      // Update AppContext
+      setSaved(savedFromFirestore);
+
       navigation.replace("BottomTabs");
     } catch (error) {
       setError(error.message);
@@ -54,20 +70,20 @@ export default function EmailAndPassword({ navigation }) {
     }
   }
 
-  async function forgotPassword(){
-    if(email!==""){
-    try{
-      await sendPasswordResetEmail(auth, email);
-      alert(`Password reset email sent on ${email}`)
-      setError(null)
-    } catch(e){
-      console.error(e)
+  async function forgotPassword() {
+    if (email !== "") {
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert(`Password reset email sent on ${email}`);
+        setError(null);
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      setError("Please enter email");
     }
-  } else {
-    setError("Please enter email");
   }
-  }
-  
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -166,7 +182,7 @@ export default function EmailAndPassword({ navigation }) {
       </View>
 
       <Pressable onPress={forgotPassword}>
-      <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        <Text style={styles.forgotPassword}>Forgot Password?</Text>
       </Pressable>
 
       {error && <Text style={styles.error}>{error}</Text>}

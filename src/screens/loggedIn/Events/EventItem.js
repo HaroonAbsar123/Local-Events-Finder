@@ -38,7 +38,7 @@ export default function EventItem({ item, navigation }) {
       position: "absolute",
       top: 10,
       right: 10,
-      backgroundColor: "#fff",
+      backgroundColor: colorScheme === "dark" ? "#3e3e3e" : "#fff",
       borderRadius: 20,
       height: 40,
       width: 40,
@@ -103,8 +103,8 @@ export default function EventItem({ item, navigation }) {
   async function onSave() {
     try {
       setSavedItem(true);
-      if(!saved.includes(item?.id)){
-        setSaved(prev => [...prev, item?.id])
+      if (!saved.includes(item?.id)) {
+        setSaved((prev) => [...prev, item?.id]);
       }
       // const docRef = doc(db, "userList", userDetails?.userId);
       // await updateDoc(docRef, {
@@ -119,8 +119,8 @@ export default function EventItem({ item, navigation }) {
   async function onUnsave() {
     try {
       setSavedItem(false);
-      if(saved.includes(item?.id)){
-        setSaved(saved.filter((e) => e !== item?.id))
+      if (saved.includes(item?.id)) {
+        setSaved(saved.filter((e) => e !== item?.id));
       }
       // const docRef = doc(db, "userList", userDetails?.userId);
       // await updateDoc(docRef, {
@@ -137,8 +137,6 @@ export default function EventItem({ item, navigation }) {
       setSavedItem(saved?.includes(item?.id));
     }
   }, [saved]);
-
-
 
   return (
     <Pressable
@@ -165,9 +163,9 @@ export default function EventItem({ item, navigation }) {
             onPress={savedItem ? onUnsave : onSave}
           >
             {savedItem ? (
-              <FontAwesome name="heart" size={25} color="#ff8043" />
+              <FontAwesome name="heart" size={22} color="#ff8043" />
             ) : (
-              <Feather name="heart" size={25} color={"#ff8043"} />
+              <Feather name="heart" size={24} color={"#ff8043"} />
             )}
           </Pressable>
         </View>
@@ -176,10 +174,10 @@ export default function EventItem({ item, navigation }) {
         <View>
           <Text style={styles.title}>{item?.name?.text}</Text>
           <Text style={styles.locationContainer}>
-  {item?.description?.text?.length > 60 
-    ? `${item?.description?.text?.slice(0, 60)}...` 
-    : item?.description?.text}
-</Text>
+            {item?.description?.text?.length > 60
+              ? `${item?.description?.text?.slice(0, 60)}...`
+              : item?.description?.text}
+          </Text>
         </View>
         <View
           style={{

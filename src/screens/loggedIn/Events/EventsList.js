@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, FlatList, Text } from "react-native";
+import { StyleSheet, View, FlatList, Text, ActivityIndicator } from "react-native";
 import EventItem from "./EventItem";
 import { AppContext } from "../../../context/AppContext";
 
 export default function EventsList({ navigation, filter, searched }) {
-  const { events, saved } = useContext(AppContext);
+  const { events, saved, loadEvents } = useContext(AppContext);
   const [currentData, setCurrentData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     let filteredEvents = events;
@@ -30,6 +31,12 @@ export default function EventsList({ navigation, filter, searched }) {
         : []
     );
   }, [events, filter, searched, saved]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadEvents(); // Execute the loadEvents function
+    setRefreshing(false);
+  };
 
   const renderItem = ({ item, index }) => {
     const isLastItemInRow =
@@ -69,6 +76,8 @@ export default function EventsList({ navigation, filter, searched }) {
       keyExtractor={(item) => item.id}
       numColumns={1}
       contentContainerStyle={styles.container}
+      refreshing={refreshing}
+      onRefresh={handleRefresh} // Set the refresh handler
     />
   );
 }

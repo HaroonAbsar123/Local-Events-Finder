@@ -14,15 +14,33 @@ export const createSavedTable = async () => {
 
 export const saveIdsToDb = async (savedIds) => {
   const db = await dbPromise;
-  await db.runAsync("DELETE FROM saved;");
-  const insertPromises = savedIds.map((id) =>
+
+  const existingIds = await loadSavedFromDb();
+
+  const newIds = savedIds.filter((id) => !existingIds.includes(id));
+  const removeIds = existingIds.filter((id) => !savedIds.includes(id));
+
+  const insertPromises = newIds.map((id) =>
     db.runAsync("INSERT INTO saved (id) VALUES (?);", [id])
   );
-  await Promise.all(insertPromises);
+
+  const removePromises = removeIds.map((id) =>
+    db.runAsync("DELETE FROM saved WHERE id = ?;", [id])
+  );
+
+  await Promise.all([...insertPromises, ...removePromises]);
 };
+
 
 export const loadSavedFromDb = async () => {
   const db = await dbPromise;
   const savedFromDb = await db.getAllAsync("SELECT * FROM saved;");
-  return savedFromDb.map((saved) => saved.id);
+  const saved = savedFromDb.map((saved) => saved.id);
+  console.log("saved", saved?.length)
+  return saved;
+};
+
+export const clearSavedTable = async () => {
+  const db = await dbPromise;
+  await db.runAsync("DELETE FROM saved;");
 };

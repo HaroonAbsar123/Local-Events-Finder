@@ -16,11 +16,10 @@ import Feather from "@expo/vector-icons/Feather";
 import { useContext, useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { AppContext } from "../../../context/AppContext";
-import OfflineBar from "../../../components/utils/OfflineBar";
 
 export default function Events({ navigation }) {
   const colorScheme = useColorScheme();
-  const {eventsLoading, onlineLoading, isOnline} = useContext(AppContext)
+  const {eventsLoading} = useContext(AppContext)
   const pallette = usePallette();
   const { width } = Dimensions.get("window");
   const [filter, setFilter] = useState("all");

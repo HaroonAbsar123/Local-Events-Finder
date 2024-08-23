@@ -41,7 +41,7 @@ export default function EventInfo({ navigation, route }) {
       position: "absolute",
       top: 10,
       right: 10,
-      backgroundColor: "#fff",
+      backgroundColor: colorScheme === "dark" ? "#3e3e3e" : "#fff",
       borderRadius: 20,
       height: 50,
       width: 50,
@@ -183,7 +183,7 @@ export default function EventInfo({ navigation, route }) {
               onPress={savedItem ? onUnsave : onSave}
             >
               {savedItem ? (
-                <FontAwesome name="heart" size={27} color="#ff8043" />
+                <FontAwesome name="heart" size={25} color="#ff8043" />
               ) : (
                 <Feather name="heart" size={27} color={"#ff8043"} />
               )}

@@ -28,8 +28,10 @@ export const saveEventsToDb = async (events) => {
 export const loadEventsFromDb = async () => {
   const db = await dbPromise;
   const eventsFromDb = await db.getAllAsync("SELECT * FROM events;");
-  return eventsFromDb.map((event) => ({
+  const events = eventsFromDb.map((event) => ({
     ...JSON.parse(event.fullObject),
     id: event.id,
   }));
+  console.log("Events", events?.length)
+  return events;
 };

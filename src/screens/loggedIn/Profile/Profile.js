@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   Pressable,
   ActivityIndicator,
+  Alert
 } from "react-native";
 import { useColorScheme } from "react-native";
 import usePallette from "../../../Pallette/Pallette";
@@ -47,6 +48,7 @@ export default function Profile({ navigation }) {
       color: "#fff",
       fontSize: 35,
       textAlign: "center",
+      width: '100%'
     },
     actionsContainer: {
       backgroundColor: colorScheme === "dark" ? "#3e3e3e" : "#fff",
@@ -70,6 +72,7 @@ export default function Profile({ navigation }) {
       borderRadius: 75,
       height: 120,
       width: 120,
+      backgroundColor: '#1e1e1e'
     },
     message: {
       fontSize: 16,
@@ -88,12 +91,11 @@ export default function Profile({ navigation }) {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       uploadImage(result.assets[0].uri)
-      console.log("result.uri", result.assets[0].uri)
     }
   } else {
-    alert("You are offline")
+    alert("This feature cannot be used offline.")
   }
   }
 
@@ -124,10 +126,29 @@ export default function Profile({ navigation }) {
     }
   }
 
-  async function logoutHandler() {
-    await AsyncStorage.clear();
-    auth.signOut();
-    navigation.replace("Login");
+  function logoutHandler() {
+    Alert.alert(
+      "Logout Confirmation",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Logout",
+          onPress: async () => {
+            await AsyncStorage.clear();
+            auth.signOut();
+            navigation.replace("Login");
+          },
+          style: "default",
+        },
+      ],
+      { cancelable: true,
+        userInterfaceStyle: colorScheme
+       }
+    );
   }
 
   return (
@@ -155,14 +176,19 @@ export default function Profile({ navigation }) {
         <View style={styles.actionsContainer}>
           <TertiaryButton
             title={colorScheme === "dark" ? "Light Mode" : "Dark Mode"}
-            onPress={() => Appearance.setColorScheme(colorScheme === "dark" ? "light" : "dark")}
+            onPress={() => 
+            {
+              Appearance.setColorScheme(colorScheme === "dark" ? "light" : "dark")
+              AsyncStorage.setItem("colorScheme", colorScheme === "dark" ? "light" : "dark")
+            }
+            }
             loading={false}
             color="#ff8043"
             borderRadius={5}
             borderTopColor={"transparent"}
             borderTopWidth={0}
           />
-          <TertiaryButton
+          {/* <TertiaryButton
             title="Edit Profile"
             onPress={() => console.log("Pressed")}
             loading={false}
@@ -170,7 +196,7 @@ export default function Profile({ navigation }) {
             borderRadius={5}
             borderTopColor={"#ff8043"}
             borderTopWidth={1}
-          />
+          /> */}
           <TertiaryButton
             title="Logout"
             onPress={logoutHandler}
