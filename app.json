@@ -15,12 +15,17 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logoWhite.png",
         "backgroundColor": "#ff8043"
       },
       "package": "com.haroonabsar3.localeventsfinder"
     },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     },
