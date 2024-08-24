@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Local-Events-Finder",
+    "name": "Local Events Finder",
     "slug": "local-events-finder",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,7 +20,12 @@
         "foregroundImage": "./assets/logoWhite.png",
         "backgroundColor": "#ff8043"
       },
-      "package": "com.haroonabsar3.localeventsfinder"
+      "package": "com.haroonabsar3.localeventsfinder",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA2qZt1I1wkLdK7HarJrIAuQvee2qzTmFQ"
+        }
+      }
     },
     "plugins": [
       "@react-native-firebase/app",
