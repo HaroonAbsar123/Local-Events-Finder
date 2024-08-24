@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451549891621",
+    "project_id": "local-events-finder-bad13",
+    "storage_bucket": "local-events-finder-bad13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451549891621:android:c97e2349e3b48f2f1243cc",
+        "android_client_info": {
+          "package_name": "com.haroonabsar3.localeventsfinder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbWh8wRIAVhZkfzwscljHqIiM9gVgeErQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
