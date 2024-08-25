@@ -12,6 +12,7 @@ web-build/
 
 google-services.json
 local-events-finder-bad13-firebase-adminsdk-4hyrc-9c279c3978.json
+app.json
 
 # macOS
 .DS_Store

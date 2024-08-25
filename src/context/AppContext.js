@@ -15,6 +15,9 @@ import {
 } from "../sqlite/SyncSaved";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Appearance } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
+import * as NavigationBar from 'expo-navigation-bar';
+
 
 export const AppContext = createContext({});
 
@@ -27,12 +30,16 @@ export function AppContextProvider({ children }) {
   const [eventsLoading, setEventsLoading] = useState(true);
   const [eventsError, setEventsError] = useState(null);
 
+  const [loadingOfflineData, setLoadingOfflineData] = useState(true);
+
   // COLOR SCHEME LOAD
   useEffect(() => {
     async function fetchAndLoadColorScheme() {
       const colorScheme = await AsyncStorage.getItem("colorScheme");
       if (colorScheme === "dark" || colorScheme === "light") {
         Appearance.setColorScheme(colorScheme);
+    NavigationBar.setButtonStyleAsync(colorScheme === "dark" ? "light" : "dark");
+    await NavigationBar.setBackgroundColorAsync(colorScheme === "dark" ? "#1e1e1e" : "#FFF")
       }
     }
     fetchAndLoadColorScheme();
@@ -41,7 +48,9 @@ export function AppContextProvider({ children }) {
   // INITIALIZE OFFLINE DATA
   useEffect(() => {
     async function loadOfflineData() {
+      setLoadingOfflineData(true)
       // Load offline data
+      try{
       const [localEvents, localSaved] = await Promise.all([
         loadEventsFromDb(),
         loadSavedFromDb(),
@@ -51,18 +60,26 @@ export function AppContextProvider({ children }) {
       setEvents(localEvents);
       setEventsLoading(false);
       setSaved(localSaved);
+      
+    } catch(e){
+      console.error(e)
+    } finally{
+      setLoadingOfflineData(false)
     }
-    if (!isOnline) {
+    }
+    // if (!isOnline) {
       loadOfflineData();
-    }
-  }, [isOnline]);
+    // }
+  }, []);
 
   // SYNC SAVED STATE CHANGES WITH SQLITE
   useEffect(() => {
     async function saveIdsToSqlite() {
       await saveIdsToDb(saved);
     }
+    if(!loadingOfflineData){
     saveIdsToSqlite();
+  }
   }, [saved]);
 
   // SYNC EVENTS STATE CHANGES WITH SQLITE
@@ -77,7 +94,7 @@ export function AppContextProvider({ children }) {
   const initializeData = useCallback(async () => {
     await createEventsTable();
     await createSavedTable();
-  }, [userDetails]);
+  }, []);
 
   useEffect(() => {
     initializeData();
@@ -97,6 +114,7 @@ export function AppContextProvider({ children }) {
       await saveEventsToDb(data.events);
     } catch (error) {
       console.error("Error syncing data:", error);
+      alert("Error loading events. Please check your network")
       setEventsError(error);
     } finally {
       setEventsLoading(false);
@@ -157,21 +175,23 @@ export function AppContextProvider({ children }) {
   }, []);
 
   // CHECK ONLINE STATUS
-  const checkOnlineStatus = useCallback(async () => {
-    try {
-      const response = await fetch("https://www.google.com");
-      setIsOnline(response.ok);
-      // setIsOnline(false);
-    } catch {
-      setIsOnline(false);
-    } finally {
+  const checkOnlineStatus = useCallback(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      // setIsOnline(false)
+      setIsOnline(state.isConnected && state.isInternetReachable);
       setOnlineLoading(false);
-    }
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
     checkOnlineStatus();
   }, [checkOnlineStatus]);
+
 
   return (
     <AppContext.Provider

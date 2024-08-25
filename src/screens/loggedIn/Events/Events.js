@@ -19,17 +19,20 @@ import { AppContext } from "../../../context/AppContext";
 
 export default function Events({ navigation }) {
   const colorScheme = useColorScheme();
-  const {eventsLoading} = useContext(AppContext)
+  const { eventsLoading } = useContext(AppContext);
   const pallette = usePallette();
   const { width } = Dimensions.get("window");
   const [filter, setFilter] = useState("all");
   const [searched, setSearched] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+
   const handleFilterSelection = (selectedFilter) => {
     setFilter(selectedFilter);
     setIsModalVisible(false);
   };
+
+    
 
   const styles = StyleSheet.create({
     container: {
@@ -196,6 +199,8 @@ export default function Events({ navigation }) {
             >
               <Text style={styles.modalButtonText}>All Events</Text>
             </Pressable>
+            
+
             <Pressable
               style={styles.modalButton}
               android_ripple={{

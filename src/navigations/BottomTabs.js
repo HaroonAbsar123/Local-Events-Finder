@@ -6,7 +6,6 @@ import TabBarText from "../components/BottomTabs/TabBarText";
 import Logo from "../assets/logoWhite.png";
 import Profile from "../screens/loggedIn/Profile/Profile";
 import Events from "../screens/loggedIn/Events/Events";
-import Saved from "../screens/loggedIn/Saved/Saved";
 
 const Tabs = createBottomTabNavigator();
 

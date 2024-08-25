@@ -4,7 +4,7 @@ import EventItem from "./EventItem";
 import { AppContext } from "../../../context/AppContext";
 
 export default function EventsList({ navigation, filter, searched }) {
-  const { events, saved, loadEvents } = useContext(AppContext);
+  const { events, saved, loadEvents, userDetails } = useContext(AppContext);
   const [currentData, setCurrentData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -34,7 +34,7 @@ export default function EventsList({ navigation, filter, searched }) {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await loadEvents(); // Execute the loadEvents function
+    await loadEvents();
     setRefreshing(false);
   };
 
