@@ -4,11 +4,13 @@ import { AppContextProvider } from "./context/AppContext";
 import "./firebase";
 import GenericStatusBar from "./components/utils/GenericStatusBar";
 import messaging from "@react-native-firebase/messaging";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "react-native";
+import LocalNotificationHandler from "./components/utils/LocalNotificationHandler";
 
 export default function App() {
 
+  const [token, setToken] = useState(null)
 
 
   const requestUserPermission = async () => {
@@ -28,7 +30,8 @@ export default function App() {
       messaging()
         .getToken()
         .then((token) => {
-          console.log("token", token);
+          setToken(token)
+          // console.log("token", token);
         });
     } else {
       console.log("Permission not granted");
@@ -66,7 +69,8 @@ export default function App() {
   }, []);
 
   return (
-    <AppContextProvider>
+    <AppContextProvider fcmToken={token}>
+      <LocalNotificationHandler />
       <GenericStatusBar />
       <NavigationContainer>
         <Main />

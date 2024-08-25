@@ -6,7 +6,6 @@ import {
   Pressable,
   Modal,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { useColorScheme } from "react-native";
 import usePallette from "../../../Pallette/Pallette";
@@ -14,116 +13,26 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Dimensions } from "react-native";
 import EventsList from "./EventsList";
 import Feather from "@expo/vector-icons/Feather";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { AppContext } from "../../../context/AppContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { doc, updateDoc } from "firebase/firestore";
-import * as Notifications from "expo-notifications";
-import { db } from "../../../firebase";
 
 export default function Events({ navigation }) {
   const colorScheme = useColorScheme();
-  const { eventsLoading, events, saved, loadEvents, userDetails } = useContext(AppContext);
+  const { eventsLoading } = useContext(AppContext);
   const pallette = usePallette();
   const { width } = Dimensions.get("window");
   const [filter, setFilter] = useState("all");
   const [searched, setSearched] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [reminderTime, setReminderTime] = useState("");
-  const [savedEvents, setSavedEvents] = useState([]);
 
-  useEffect(() => {
-    setSavedEvents(events?.filter((item) => saved?.includes(item.id)));
-  }, [saved, events]);
-
-  useEffect(() => {
-    loadReminderTime();
-  }, []);
-
-  useEffect(() => {
-    checkAndSendNotifications();
-  }, [savedEvents, reminderTime]);
-
-
-  const loadReminderTime = async () => {
-    try {
-      const savedTime = await AsyncStorage.getItem("reminderTime");
-      console.log("savedTime", savedTime)
-      if (savedTime) {
-        setReminderTime(savedTime);
-      }
-    } catch (error) {
-      console.error("Failed to load reminder time from AsyncStorage", error);
-    }
-  };
-
-  const saveReminderTime = async () => {
-    try {
-      await AsyncStorage.setItem("reminderTime", reminderTime);
-      await updateDoc(doc(db, "userList", userDetails?.userId), {
-        reminderTime,
-      });
-      Alert.alert("Success", "Reminder time saved successfully!");
-      setIsModalVisible(false);
-    } catch (error) {
-      console.error("Failed to save reminder time", error);
-      Alert.alert("Error", "Failed to save reminder time.");
-    }
-  };
-
-  const checkAndSendNotifications = () => {
-    if (!reminderTime) return;
-
-    const timeParts = reminderTime.split(" ");
-    const value = parseInt(timeParts[0]);
-    const unit = timeParts[1]?.toLowerCase();
-
-    savedEvents.forEach((item) => {
-      const eventDate = new Date(item?.start?.local);
-      let reminderDate;
-
-      if (unit?.includes("hour") || unit?.includes("hours")) {
-        reminderDate = new Date(eventDate.getTime() - value * 60 * 60 * 1000);
-      } else if (unit?.includes("minute") || unit?.includes("minutes")) {
-        reminderDate = new Date(eventDate.getTime() - value * 60 * 1000);
-      } else if (unit?.includes("day") || unit?.includes("days")) {
-        reminderDate = new Date(eventDate.getTime() - value * 24 * 60 * 60 * 1000);
-      }
-
-      if (new Date() >= reminderDate) {
-        sendNotification(item);
-      }
-    });
-  };
-
-  const sendNotification = async (item) => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Event Reminder",
-        body: `Your event "${item.title}" is coming up soon!`,
-        data: { eventId: item.id },
-      },
-      trigger: null,
-    });
-  };
 
   const handleFilterSelection = (selectedFilter) => {
     setFilter(selectedFilter);
     setIsModalVisible(false);
   };
 
-  const handleReminderTimeChange = (text) => {
-    setReminderTime(text);
-  };
-
-  const handleSaveReminderTime = () => {
-    if (!reminderTime) {
-      Alert.alert("Error", "Please enter a valid reminder time.");
-      return;
-    }
-    saveReminderTime();
-  };
+    
 
   const styles = StyleSheet.create({
     container: {
@@ -210,28 +119,7 @@ export default function Events({ navigation }) {
     modalButtonText: {
       fontSize: 16,
       ...pallette.textColor,
-    },
-    reminderInput: {
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 5,
-      padding: 10,
-      width: "100%",
-      marginTop: 10,
-      marginBottom: 10,
-      color: colorScheme === "dark" ? "#fff" : "#000",
-    },
-    saveButton: {
-      marginTop: 10,
-      backgroundColor: "#ff8043",
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 5,
-    },
-    saveButtonText: {
-      color: "#fff",
-      fontSize: 16,
-    },
+    }
   });
 
   return (
@@ -239,9 +127,7 @@ export default function Events({ navigation }) {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.scrollView}>
           <View style={styles.headingContainer}>
-            <Text style={styles.topHeading}>
-              {filter === "all" ? "Discover Events" : "Saved Events"}
-            </Text>
+            <Text style={styles.topHeading}>{filter === "all" ? "Discover Events" : "Saved Events"}</Text>
             <View style={styles.filterButton}>
               <Pressable
                 android_ripple={{ color: "#ccc" }}
@@ -259,9 +145,7 @@ export default function Events({ navigation }) {
           <View style={styles.searchBar}>
             <Feather name="search" size={24} color={"#9e9e9e"} />
             <TextInput
-              placeholder={
-                filter === "all" ? "Search events" : "Search saved events"
-              }
+              placeholder={filter === "all" ? "Search events" : "Search saved events"}
               style={styles.searchInput}
               placeholderTextColor={"#9e9e9e"}
               value={searched}
@@ -277,15 +161,22 @@ export default function Events({ navigation }) {
               </Pressable>
             )}
           </View>
-          {eventsLoading ? (
-            <ActivityIndicator size="large" color={"#ff8043"} />
-          ) : (
-            <EventsList navigation={navigation} filter={filter} searched={searched} />
-          )}
+          {
+            eventsLoading ?
+        <ActivityIndicator size="large" color={"#ff8043"} />
+        :
+        <EventsList
+          navigation={navigation}
+          filter={filter}
+          searched={searched}
+        />
+          }
         </View>
       </SafeAreaView>
 
-      {/* Modal for setting reminder time */}
+      
+
+      {/* Modal for filter selection */}
       <Modal
         transparent={true}
         visible={isModalVisible}
@@ -297,20 +188,40 @@ export default function Events({ navigation }) {
           onPress={() => setIsModalVisible(false)}
         >
           <View style={styles.modalContent}>
-            <Text style={styles.modalHeading}>Set Reminder Time</Text>
-            <TextInput
-              placeholder="e.g., 1 hour, 30 minutes, 2 days"
-              style={styles.reminderInput}
-              value={reminderTime}
-              onChangeText={handleReminderTimeChange}
-              placeholderTextColor={"#9e9e9e"}
-            />
+            <Text style={styles.modalHeading}>Filter Events</Text>
             <Pressable
-              style={styles.saveButton}
-              onPress={handleSaveReminderTime}
+              style={styles.modalButton}
+              android_ripple={{
+                color:
+                  colorScheme === "dark"
+                    ? "#5e5e5e"
+                    : "rgba(255, 128, 67, 0.3)",
+              }}
+              onPress={() => handleFilterSelection("all")}
             >
-              <Text style={styles.saveButtonText}>Save Reminder Time</Text>
+              <Text style={styles.modalButtonText}>All Events</Text>
             </Pressable>
+            
+
+            <Pressable
+              style={styles.modalButton}
+              android_ripple={{
+                color:
+                  colorScheme === "dark"
+                    ? "#5e5e5e"
+                    : "rgba(255, 128, 67, 0.3)",
+              }}
+              onPress={() => handleFilterSelection("saved")}
+            >
+              <Text style={styles.modalButtonText}>Saved</Text>
+            </Pressable>
+            {/* <Pressable
+              style={styles.cancelButton}
+              android_ripple={{color: '#5e5e5e'}}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </Pressable> */}
           </View>
         </Pressable>
       </Modal>
