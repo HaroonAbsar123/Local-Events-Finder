@@ -20,6 +20,7 @@ import { AppContext } from "../../../context/AppContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
+import { resetEventNotifications } from "../../../sqlite/SyncEvents";
 
 export default function Events({ navigation }) {
   const colorScheme = useColorScheme();
@@ -37,18 +38,23 @@ export default function Events({ navigation }) {
   const [searched, setSearched] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const saveReminderTime = async () => {
     try {
+      setSaving(true);
       await AsyncStorage.setItem("reminderTime", reminderTime);
       await updateDoc(doc(db, "userList", userDetails?.userId), {
         reminderTime,
       });
+      await resetEventNotifications();
       Alert.alert("Success", "Reminder time saved successfully!");
       setIsModalVisible(false);
     } catch (error) {
       console.error("Failed to save reminder time", error);
       Alert.alert("Error", "Failed to save reminder time.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -63,26 +69,30 @@ export default function Events({ navigation }) {
 
   const handleSaveReminderTime = () => {
     const parts = reminderTime.split(" ");
-    
+
     if (parts.length !== 2) {
       Alert.alert("Error", "Please enter a valid reminder time.");
       return;
     }
-  
+
     const value = parseInt(parts[0], 10);
     const unit = parts[1].toLowerCase();
-  
-    if (isNaN(value) ||
-      (unit !== "minute" && unit !== "minutes" && 
-       unit !== "hour" && unit !== "hours" &&
-       unit !== "day" && unit !== "days")) {
+
+    if (
+      isNaN(value) ||
+      (unit !== "minute" &&
+        unit !== "minutes" &&
+        unit !== "hour" &&
+        unit !== "hours" &&
+        unit !== "day" &&
+        unit !== "days")
+    ) {
       Alert.alert("Error", "Please enter a valid reminder time.");
       return;
     }
-  
+
     saveReminderTime();
   };
-  
 
   const styles = StyleSheet.create({
     container: {
@@ -125,13 +135,14 @@ export default function Events({ navigation }) {
       flexDirection: "row",
       marginTop: 10,
       marginBottom: 10,
-      backgroundColor: colorScheme === "dark" ? "transparent" : "#fff",
+      backgroundColor: colorScheme === "dark" ? "#2e2e2e" : "#fff",
       elevation: 2,
     },
     searchInput: {
       flex: 1,
       color: colorScheme === "dark" ? "#fff" : "#4e4e4e",
       fontSize: 15,
+      backgroundColor: "transparent",
     },
     modalContainer: {
       flex: 1,
@@ -282,12 +293,9 @@ export default function Events({ navigation }) {
                     ? "#5e5e5e"
                     : "rgba(255, 128, 67, 0.3)",
               }}
-              onPress={() => {
-                setFilterModal(false);
-                setIsModalVisible(true);
-              }}
+              onPress={() => handleFilterSelection("saved")}
             >
-              <Text style={styles.modalButtonText}>Set Reminder Time</Text>
+              <Text style={styles.modalButtonText}>Saved</Text>
             </Pressable>
 
             <Pressable
@@ -298,17 +306,13 @@ export default function Events({ navigation }) {
                     ? "#5e5e5e"
                     : "rgba(255, 128, 67, 0.3)",
               }}
-              onPress={() => handleFilterSelection("saved")}
+              onPress={() => {
+                setFilterModal(false);
+                setIsModalVisible(true);
+              }}
             >
-              <Text style={styles.modalButtonText}>Saved</Text>
+              <Text style={styles.modalButtonText}>Set Reminder Time</Text>
             </Pressable>
-            {/* <Pressable
-              style={styles.cancelButton}
-              android_ripple={{color: '#5e5e5e'}}
-              onPress={() => setIsModalVisible(false)}
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </Pressable> */}
           </View>
         </Pressable>
       </Modal>
@@ -334,10 +338,13 @@ export default function Events({ navigation }) {
               placeholderTextColor={"#9e9e9e"}
             />
             <Pressable
+              disabled={saving}
               style={styles.saveButton}
               onPress={handleSaveReminderTime}
             >
-              <Text style={styles.saveButtonText}>Save Reminder Time</Text>
+              <Text style={styles.saveButtonText}>
+                {saving ? "Saving" : "Save Reminder Time"}
+              </Text>
             </Pressable>
           </View>
         </Pressable>

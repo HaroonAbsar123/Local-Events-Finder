@@ -19,12 +19,6 @@ import NetInfo from "@react-native-community/netinfo";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
 
-import * as TaskManager from "expo-task-manager";
-import * as BackgroundFetch from "expo-background-fetch";
-import { Platform } from "react-native";
-
-const BACKGROUND_FETCH_TASK = "background-fetch-task";
-
 export const AppContext = createContext({});
 
 export function AppContextProvider({ children, fcmToken }) {
@@ -37,6 +31,7 @@ export function AppContextProvider({ children, fcmToken }) {
   const [eventsError, setEventsError] = useState(null);
   const [loadingOfflineData, setLoadingOfflineData] = useState(true);
   const [token, setToken] = useState(token);
+  const [reminderTime, setReminderTime] = useState("");
 
   useEffect(() => {
     setToken(fcmToken);
@@ -60,20 +55,6 @@ export function AppContextProvider({ children, fcmToken }) {
     }
   }, [userDetails]);
 
-  // __________________________REMINDER NOTIFICATION FUNCTIONS__________________________________
-
-  const [reminderTime, setReminderTime] = useState("");
-
-  const sendNotification = async (item) => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Event Reminder",
-        body: `Your event "${item.name.text}" is coming up soon!`,
-        data: { eventId: item.id },
-      },
-      trigger: null,
-    });
-  };
 
   // _____________________________________________________________________
 
@@ -92,32 +73,6 @@ export function AppContextProvider({ children, fcmToken }) {
       }
     }
     fetchAndLoadColorScheme();
-  }, []);
-
-  // INITIALIZE OFFLINE DATA
-  useEffect(() => {
-    async function loadOfflineData() {
-      setLoadingOfflineData(true);
-      // Load offline data
-      try {
-        const [localEvents, localSaved] = await Promise.all([
-          loadEventsFromDb(),
-          loadSavedFromDb(),
-        ]);
-
-        // console.log("localEvents", localEvents)
-        setEvents(localEvents);
-        setEventsLoading(false);
-        setSaved(localSaved);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoadingOfflineData(false);
-      }
-    }
-    // if (!isOnline) {
-    loadOfflineData();
-    // }
   }, []);
 
   // SYNC SAVED STATE CHANGES WITH SQLITE
@@ -197,6 +152,9 @@ export function AppContextProvider({ children, fcmToken }) {
         async (doc) => {
           if (doc.exists()) {
             setUserDetails(doc.data());
+            if(doc.data()?.reminderTime){
+            setReminderTime(doc.data()?.reminderTime)
+          }
           } else {
             console.log("User not found in Firestore");
             setUserDetails(null);
@@ -232,6 +190,38 @@ export function AppContextProvider({ children, fcmToken }) {
     checkOnlineStatus();
   }, [checkOnlineStatus]);
 
+  
+  // INITIALIZE OFFLINE DATA
+  useEffect(() => {
+
+    const userId = AsyncStorage.getItem("userId")
+
+    async function loadOfflineData() {
+      setLoadingOfflineData(true);
+      // Load offline data
+      try {
+        const [localEvents, localSaved] = await Promise.all([
+          loadEventsFromDb(),
+          loadSavedFromDb(),
+        ]);
+
+        // console.log("localEvents", localEvents)
+        setEvents(localEvents);
+        setEventsLoading(false);
+        setSaved(localSaved);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoadingOfflineData(false);
+      }
+    }
+    if (userId) {
+    loadOfflineData();
+    }
+  }, []);
+
+
+
   return (
     <AppContext.Provider
       value={{
@@ -250,7 +240,6 @@ export function AppContextProvider({ children, fcmToken }) {
         loadEvents,
         reminderTime,
         setReminderTime,
-        sendNotification,
       }}
     >
       {children}

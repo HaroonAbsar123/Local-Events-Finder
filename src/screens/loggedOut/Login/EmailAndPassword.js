@@ -23,7 +23,7 @@ import { saveIdsToDb } from "../../../sqlite/SyncSaved";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function EmailAndPassword({ navigation }) {
-  const { setSaved } = useContext(AppContext);
+  const { setSaved, setReminderTime } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -61,6 +61,8 @@ export default function EmailAndPassword({ navigation }) {
 
       // Update AppContext
       setSaved(savedFromFirestore);
+      setReminderTime(userDoc.data()?.reminderTime)
+      AsyncStorage.setItem("reminderTime", userDoc.data()?.reminderTime)
 
       navigation.replace("BottomTabs");
     } catch (error) {

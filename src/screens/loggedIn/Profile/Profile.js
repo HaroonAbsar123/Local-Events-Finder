@@ -23,7 +23,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function Profile({ navigation }) {
-  const { userDetails, isOnline, sendNotification } = useContext(AppContext);
+  const { userDetails, isOnline } = useContext(AppContext);
   const colorScheme = useColorScheme();
   const pallette = usePallette();
   const [uploading, setUploading] = useState(false);
@@ -188,20 +188,6 @@ export default function Profile({ navigation }) {
             borderTopColor={"transparent"}
             borderTopWidth={0}
           />
-          {/* <TertiaryButton
-            title="Notify"
-            onPress={() => 
-  sendNotification({
-    name: {text: "TEST NOTIFICATION"},
-    id: 1232132435
-  })
-            }
-            loading={false}
-            color="#ff8043"
-            borderRadius={5}
-            borderTopColor={"#ff8043"}
-            borderTopWidth={1}
-          /> */}
           <TertiaryButton
             title="Logout"
             onPress={logoutHandler}

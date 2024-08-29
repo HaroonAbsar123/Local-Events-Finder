@@ -110,7 +110,7 @@ export const registerBackgroundTask = async () => {
     }
 
     await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-      minimumInterval: 5, // seconds
+      minimumInterval: 5, // Run every 5 minutes
       stopOnTerminate: false, // continue after app is killed
       startOnBoot: true, // auto-start when the device is restarted
     });
