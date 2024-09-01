@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
 import { useColorScheme } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 

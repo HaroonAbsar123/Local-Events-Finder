@@ -63,15 +63,9 @@ export default function EmailAndPassword({ navigation }) {
         name: name,
         email: email,
         userId: userCredential.user.uid,
-        saved: []
+        saved: [],
       });
-      // setUserDetails({
-      //   name,
-      //   email,
-      //   userId: userCredential.user.uid,
-      //   saved: []
-      // });
-      AsyncStorage.setItem("userId", userCredential.user.uid)
+      AsyncStorage.setItem("userId", userCredential.user.uid);
       navigation.replace("BottomTabs");
     } catch (error) {
       setError(error.message);

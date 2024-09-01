@@ -1,5 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, FlatList, Text, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import EventItem from "./EventItem";
 import { AppContext } from "../../../context/AppContext";
 
@@ -56,12 +62,9 @@ export default function EventsList({ navigation, filter, searched }) {
     return (
       <Text style={styles.noEventsText}>
         {filter === "saved"
-          ? (
-            searched ?.length > 0 ?
-            "No such events"
-            :
-            "No saved events"
-          )
+          ? searched?.length > 0
+            ? "No such events"
+            : "No saved events"
           : searched?.length > 0
           ? "No such events"
           : "No events available"}

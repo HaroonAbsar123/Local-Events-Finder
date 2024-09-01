@@ -10,13 +10,12 @@ const BACKGROUND_FETCH_TASK = "background-fetch-task";
 
 // Define the background fetch task
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
-  console.log("Background task is running."); // Log when the task starts
+  console.log("Background task is running.");
 
   try {
     const reminderTime = await AsyncStorage.getItem("reminderTime");
     console.log("Reminder time:", reminderTime);
 
-    // Load events and saved data
     const events = await loadEventsFromDb();
     const saved = await loadSavedFromDb();
     console.log("Loaded events and saved data.");
@@ -51,7 +50,6 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
             currentTime
           );
 
-          // Ensure the event is in the future before sending a notification
           if (
             timeUntilEvent > 0 &&
             timeUntilEvent <= reminderInMilliseconds &&
@@ -93,7 +91,7 @@ const sendNotification = async (item) => {
       body: `Your event "${item.name.text}" is coming up soon!`,
       data: { eventId: item.id },
     },
-    trigger: { seconds: 1 }, // Trigger notification immediately
+    trigger: { seconds: 1 },
   });
 };
 
@@ -110,9 +108,9 @@ export const registerBackgroundTask = async () => {
     }
 
     await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-      minimumInterval: 5, // Run every 5 minutes
-      stopOnTerminate: false, // continue after app is killed
-      startOnBoot: true, // auto-start when the device is restarted
+      minimumInterval: 5,
+      stopOnTerminate: false,
+      startOnBoot: true,
     });
     console.log("Background task registered.");
   } catch (error) {

@@ -3,8 +3,6 @@ import { useColorScheme } from "react-native";
 import usePallette from "../../../Pallette/Pallette";
 import DummyImage from "../../../assets/event.jpg";
 import Feather from "@expo/vector-icons/Feather";
-import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -57,7 +55,6 @@ export default function EventItem({ item, navigation }) {
       gap: 10,
     },
     title: {
-      // ...pallette.textColor,
       fontSize: 18,
       fontWeight: "bold",
       color: "#ff8043",

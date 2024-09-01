@@ -12,9 +12,9 @@ import ReminderNotifications from "./components/utils/ReminderNotifications";
 import * as Notifications from "expo-notifications";
 
 export default function Appp() {
+  // FIREBASE MESSAGING NOTIFICATIONS
 
-  const [token, setToken] = useState(null)
-
+  const [token, setToken] = useState(null);
 
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
@@ -28,12 +28,11 @@ export default function Appp() {
   };
 
   useEffect(() => {
-
     if (requestUserPermission()) {
       messaging()
         .getToken()
         .then((token) => {
-          setToken(token)
+          setToken(token);
           // console.log("token", token);
         });
     } else {
@@ -71,39 +70,36 @@ export default function Appp() {
     return unsubscribe;
   }, []);
 
-
-
-// ______________________________________________________________________________
+  // ______________________________________________________________________________
 
   // REMINDER NOTIFICATIONS
 
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
-  
+
   useEffect(() => {
     if (
       lastNotificationResponse &&
-      lastNotificationResponse.notification.request.content.data['someDataToCheck'] &&
-      lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER
+      lastNotificationResponse.notification.request.content.data[
+        "someDataToCheck"
+      ] &&
+      lastNotificationResponse.actionIdentifier ===
+        Notifications.DEFAULT_ACTION_IDENTIFIER
     ) {
       // navigate to your desired screen
     }
   }, [lastNotificationResponse]);
 
-
   const getNotificationPermissions = async () => {
     const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Notification permissions not granted.');
+    if (status !== "granted") {
+      console.log("Notification permissions not granted.");
     }
   };
-
 
   useEffect(() => {
     getNotificationPermissions();
     registerBackgroundTask();
-  }, [])
-
-
+  }, []);
 
   return (
     <AppContextProvider fcmToken={token}>

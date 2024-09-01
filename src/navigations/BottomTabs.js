@@ -1,9 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Pressable, View, useColorScheme, Image } from "react-native";
+import { useColorScheme } from "react-native";
 import TabBarIcon from "../components/BottomTabs/TabBarIcon";
 import TabBarText from "../components/BottomTabs/TabBarText";
-import Logo from "../assets/logoWhite.png";
 import Profile from "../screens/loggedIn/Profile/Profile";
 import Events from "../screens/loggedIn/Events/Events";
 
@@ -23,29 +22,6 @@ export const BottomTabs = () => {
       }}
       initialRouteName="Events"
     >
-      {/* <Tabs.Screen
-        name="Saved"
-        component={Saved}
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title="Saved" />
-          ),
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={"heart"} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="Events"
-        component={Events}
-        options={{
-          tabBarLabel: () => null,
-          tabBarButton: ({ onPress }) => (
-            <CustomEventButton onPress={onPress} />
-          ),
-        }}
-      /> */}
-      
       <Tabs.Screen
         name="Events"
         component={Events}
@@ -74,34 +50,3 @@ export const BottomTabs = () => {
   );
 };
 
-function CustomEventButton({ onPress }) {
-  return (
-    <View
-      style={{
-        backgroundColor: "#ff8043",
-        height: 60,
-        width: 60,
-        borderRadius: 30,
-        transform: "translateY(-20px)",
-        overflow: "hidden",
-      }}
-    >
-      <Pressable
-        onPress={onPress}
-        android_ripple={{ color: "#ffb795" }}
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          display: "flex",
-        }}
-      >
-        <Image
-          source={Logo}
-          alt=""
-          style={{ width: 50, height: 50, objectFit: "contain" }}
-        />
-      </Pressable>
-    </View>
-  );
-}

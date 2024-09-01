@@ -49,20 +49,15 @@ export default function EmailAndPassword({ navigation }) {
       const userId = userCredential.user.uid;
       AsyncStorage.setItem("userId", userId);
 
-      // Fetch user's saved events from Firestore
       const userDocRef = doc(db, "userList", userId);
       const userDoc = await getDoc(userDocRef);
       const savedFromFirestore = userDoc.exists()
         ? userDoc.data().saved || []
         : [];
 
-      // Store them in SQLite
-      // await saveIdsToDb(savedFromFirestore);
-
-      // Update AppContext
       setSaved(savedFromFirestore);
-      setReminderTime(userDoc.data()?.reminderTime)
-      AsyncStorage.setItem("reminderTime", userDoc.data()?.reminderTime)
+      setReminderTime(userDoc.data()?.reminderTime);
+      AsyncStorage.setItem("reminderTime", userDoc.data()?.reminderTime);
 
       navigation.replace("BottomTabs");
     } catch (error) {

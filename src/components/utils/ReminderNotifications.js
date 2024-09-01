@@ -23,10 +23,9 @@ export default function ReminderNotifications() {
       setEvents(filteredEvents);
     };
 
-    // Polling to check for updates every 5 seconds
     const intervalId = setInterval(fetchData, 5000);
 
-    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -44,7 +43,6 @@ export default function ReminderNotifications() {
           currentTime
         );
 
-        // Ensure the event is in the future before sending a notification
         if (
           timeUntilEvent > 0 &&
           timeUntilEvent <= reminderInMilliseconds &&

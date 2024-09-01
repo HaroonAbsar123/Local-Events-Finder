@@ -10,8 +10,6 @@ import {
 import usePallette from "../../../Pallette/Pallette";
 import PrimaryButton from "../../../components/utils/PrimaryButton";
 import DummyImage from "../../../assets/event.jpg";
-import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { AppContext } from "../../../context/AppContext";
@@ -126,12 +124,11 @@ export default function EventInfo({ navigation, route }) {
     );
   }
 
-
   async function onSave() {
     try {
       setSavedItem(true);
-      if(!saved.includes(item?.id)){
-        setSaved(prev => [...prev, item?.id])
+      if (!saved.includes(item?.id)) {
+        setSaved((prev) => [...prev, item?.id]);
       }
       // const docRef = doc(db, "userList", userDetails?.userId);
       // await updateDoc(docRef, {
@@ -146,8 +143,8 @@ export default function EventInfo({ navigation, route }) {
   async function onUnsave() {
     try {
       setSavedItem(false);
-      if(saved.includes(item?.id)){
-        setSaved(saved.filter((e) => e !== item?.id))
+      if (saved.includes(item?.id)) {
+        setSaved(saved.filter((e) => e !== item?.id));
       }
       // const docRef = doc(db, "userList", userDetails?.userId);
       // await updateDoc(docRef, {
@@ -164,7 +161,6 @@ export default function EventInfo({ navigation, route }) {
       setSavedItem(saved?.includes(item?.id));
     }
   }, [saved]);
-
 
   return (
     <View style={pallette.screen}>

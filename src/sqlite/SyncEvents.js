@@ -109,17 +109,3 @@ export const resetEventNotifications = async () => {
   }
 };
 
-
-
-
-// export const saveEventsToDb = async (events) => {
-//   const db = await dbPromise;
-//   await db.runAsync("DELETE FROM events;");
-//   const insertPromises = events.map((event) =>
-//     db.runAsync("INSERT INTO events (id, fullObject) VALUES (?, ?);", [
-//       event.id,
-//       JSON.stringify(event),
-//     ])
-//   );
-//   await Promise.all(insertPromises);
-// };
